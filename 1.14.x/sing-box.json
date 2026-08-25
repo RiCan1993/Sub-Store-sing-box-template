@@ -117,12 +117,6 @@
     ],
     "rules": [
       {
-        "rule_set": [
-          "Reject"
-        ],
-        "action": "predefined"
-      },
-      {
         "clash_mode": "Direct",
         "action": "route",
         "server": "local"
@@ -138,23 +132,6 @@
         ],
         "action": "route",
         "server": "ali-doh"
-      },
-      {
-        "type": "logical",
-        "mode": "and",
-        "rules": [
-          {
-            "clash_mode": "AllowAds",
-            "invert": true
-          },
-          {
-            "rule_set": [
-              "Reject",
-              "Ads_AWAvenue"
-            ]
-          }
-        ],
-        "action": "reject"
       },
       {
         "rule_set": [
@@ -364,23 +341,6 @@
         "outbound": "⚡ 全局直连"
       },
       {
-        "type": "logical",
-        "mode": "and",
-        "rules": [
-          {
-            "clash_mode": "AllowAds",
-            "invert": true
-          },
-          {
-            "rule_set": [
-              "Reject",
-              "Ads_AWAvenue"
-            ]
-          }
-        ],
-        "action": "reject"
-      },
-      {
         "rule_set": [
           "AI"
         ],
@@ -437,8 +397,6 @@
       {
         "type": "remote",
         "tag": [
-          "Reject",
-          "Ads_AWAvenue",
           "Proxy",
           "AI",
           "Google",
