@@ -341,8 +341,16 @@
         "outbound": "⚡ 全局直连"
       },
       {
-        "rule_set": [
-          "AI"
+        "domain_suffix": [
+          "superfj.com"
+        ],
+        "action": "route",
+        "outbound": "🤖 AI服务"
+      },
+      {
+        "ip_cidr": [
+          "207.57.123.187",
+          "2001:df1:7880:6::c4"
         ],
         "action": "route",
         "outbound": "🤖 AI服务"
@@ -398,7 +406,6 @@
         "type": "remote",
         "tag": [
           "Proxy",
-          "AI",
           "Google",
           "YouTube",
           "Github",
