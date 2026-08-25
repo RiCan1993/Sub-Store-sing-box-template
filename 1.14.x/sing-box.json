@@ -279,8 +279,9 @@
     {
       "tag": "🚀 节点选择",
       "type": "selector",
-      "outbounds": [],
-      "default": "🎈 自动选择",
+      "outbounds": [
+        "🎈 自动选择"
+      ],
       "interrupt_exist_connections": true
     },
     {
@@ -294,17 +295,18 @@
     {
       "tag": "🔍 谷歌服务",
       "type": "selector",
-      "outbounds": [],
-      "default": "🎈 自动选择",
+      "outbounds": [
+        "🎈 自动选择"
+      ],
       "interrupt_exist_connections": true
     },
     {
       "tag": "🤖 AI服务",
       "type": "selector",
       "outbounds": [
+        "🎈 自动选择",
         "⚡ 全局直连"
       ],
-      "default": "🎈 自动选择",
       "interrupt_exist_connections": true
     },
     {
