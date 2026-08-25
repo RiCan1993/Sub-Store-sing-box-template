@@ -5,20 +5,83 @@
     "output": "",
     "timestamp": false
   },
-  "experimental": {
-    "clash_api": {
-      "external_controller": "0.0.0.0:9090",
-      "external_ui": "dashboard",
-      "secret": "",
-      "default_mode": "rule"
-    }
+  "dns": {
+    "servers": [
+      {
+        "tag": "Fake-IP",
+        "address": "fakeip"
+      },
+      {
+        "tag": "Local-DNS",
+        "address": "https://223.5.5.5:443/dns-query",
+        "address_resolver": "Local-DNS-Resolver",
+        "detour": "direct"
+      },
+      {
+        "tag": "Local-DNS-Resolver",
+        "address": "udp://223.5.5.5:53",
+        "detour": "direct"
+      },
+      {
+        "tag": "Remote-DNS",
+        "address": "tls://8.8.8.8:853",
+        "address_resolver": "Remote-DNS-Resolver",
+        "detour": "🚀 节点选择"
+      },
+      {
+        "tag": "Remote-DNS-Resolver",
+        "address": "udp://8.8.8.8:53",
+        "detour": "🚀 节点选择"
+      }
+    ],
+    "rules": [
+      {
+        "action": "route",
+        "server": "Local-DNS",
+        "outbound": "any"
+      },
+      {
+        "action": "route",
+        "clash_mode": "direct",
+        "server": "Local-DNS"
+      },
+      {
+        "action": "route",
+        "clash_mode": "global",
+        "server": "Remote-DNS"
+      },
+      {
+        "action": "route",
+        "rule_set": [
+          "GeoSite-CN"
+        ],
+        "server": "Local-DNS"
+      },
+      {
+        "action": "route",
+        "rule_set": [
+          "GeoLocation-!CN"
+        ],
+        "server": "Remote-DNS"
+      }
+    ],
+    "disable_cache": false,
+    "disable_expire": false,
+    "independent_cache": false,
+    "final": "Remote-DNS",
+    "fakeip": {
+      "enabled": true,
+      "inet4_range": "198.18.0.0/15",
+      "inet6_range": "fc00::/18"
+    },
+    "strategy": "ipv4_only"
   },
   "inbounds": [
     {
       "type": "mixed",
       "tag": "mixed-in",
-      "listen": "0.0.0.0",
-      "listen_port": 9999,
+      "listen": "127.0.0.1",
+      "listen_port": 20122,
       "tcp_fast_open": false,
       "tcp_multi_path": false,
       "udp_fragment": false
@@ -32,14 +95,14 @@
       ],
       "mtu": 0,
       "auto_route": true,
-      "strict_route": false,
+      "strict_route": true,
       "endpoint_independent_nat": false,
       "stack": "mixed",
       "platform": {
         "http_proxy": {
           "enabled": true,
-          "server": "0.0.0.0",
-          "server_port": 9999
+          "server": "127.0.0.1",
+          "server_port": 20122
         }
       }
     }
@@ -72,14 +135,6 @@
     },
     {
       "type": "selector",
-      "tag": "🛑 全球拦截",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "direct"
-      ]
-    },
-    {
-      "type": "selector",
       "tag": "🐟 漏网之鱼",
       "interrupt_exist_connections": true,
       "outbounds": [
@@ -95,7 +150,6 @@
         "🚀 节点选择",
         "🎈 自动选择",
         "🎯 全球直连",
-        "🛑 全球拦截",
         "🐟 漏网之鱼"
       ]
     },
@@ -130,16 +184,14 @@
         "outbound": "🎯 全球直连"
       },
       {
-        "action": "route",
-        "protocol": "quic",
-        "outbound": "🛑 全球拦截"
+        "action": "reject",
+        "protocol": "quic"
       },
       {
-        "action": "route",
+        "action": "reject",
         "rule_set": [
           "Category-Ads"
-        ],
-        "outbound": "🛑 全球拦截"
+        ]
       },
       {
         "action": "route",
@@ -224,75 +276,25 @@
     "auto_detect_interface": true,
     "final": "🐟 漏网之鱼"
   },
-  "dns": {
-    "servers": [
-      {
-        "tag": "Fake-IP",
-        "address": "fakeip"
-      },
-      {
-        "tag": "Local-DNS",
-        "address": "https://223.5.5.5:443/dns-query",
-        "address_resolver": "Local-DNS-Resolver",
-        "detour": "direct"
-      },
-      {
-        "tag": "Local-DNS-Resolver",
-        "address": "udp://223.5.5.5:53",
-        "detour": "direct"
-      },
-      {
-        "tag": "Remote-DNS",
-        "address": "tls://8.8.8.8:853",
-        "address_resolver": "Remote-DNS-Resolver",
-        "detour": "🚀 节点选择"
-      },
-      {
-        "tag": "Remote-DNS-Resolver",
-        "address": "udp://8.8.8.8:53",
-        "detour": "🚀 节点选择"
-      }
-    ],
-    "rules": [
-      {
-        "action": "route",
-        "server": "Local-DNS",
-        "outbound": "any"
-      },
-      {
-        "action": "route",
-        "clash_mode": "direct",
-        "server": "Local-DNS"
-      },
-      {
-        "action": "route",
-        "clash_mode": "global",
-        "server": "Remote-DNS"
-      },
-      {
-        "action": "route",
-        "rule_set": [
-          "GeoSite-CN"
-        ],
-        "server": "Local-DNS"
-      },
-      {
-        "action": "route",
-        "rule_set": [
-          "GeoLocation-!CN"
-        ],
-        "server": "Remote-DNS"
-      }
-    ],
-    "disable_cache": false,
-    "disable_expire": false,
-    "independent_cache": false,
-    "final": "Remote-DNS",
-    "fakeip": {
-      "enabled": true,
-      "inet4_range": "198.18.0.0/15",
-      "inet6_range": "fc00::/18"
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:20123",
+      "external_ui": "",
+      "external_ui_download_url": "",
+      "external_ui_download_detour": "🎯 全球直连",
+      "secret": "6871c336707fb529b5cfe83e64aecd6f2bd31ae04aa92e44249691cb8ce80ca3",
+      "default_mode": "rule",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "access_control_allow_private_network": false
     },
-    "strategy": "ipv4_only"
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db",
+      "cache_id": "ID_hgt28d4r",
+      "store_fakeip": true,
+      "rdrc_timeout": "7d"
+    }
   }
 }
