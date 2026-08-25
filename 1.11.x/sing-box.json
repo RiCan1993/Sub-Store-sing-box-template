@@ -188,12 +188,6 @@
         "protocol": "quic"
       },
       {
-        "action": "reject",
-        "rule_set": [
-          "Category-Ads"
-        ]
-      },
-      {
         "action": "route",
         "rule_set": [
           "GeoSite-Private"
@@ -230,13 +224,6 @@
       }
     ],
     "rule_set": [
-      {
-        "tag": "Category-Ads",
-        "type": "remote",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/category-ads-all.srs",
-        "format": "binary",
-        "download_detour": "🎯 全球直连"
-      },
       {
         "tag": "GeoIP-Private",
         "type": "remote",
