@@ -3,18 +3,108 @@
     "level": "info",
     "timestamp": true
   },
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "zashboard",
+      "secret": "singbox",
+      "external_ui_download_url": "https://gh-proxy.com/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
+      "external_ui_download_detour": "⚡ 全局直连",
+      "default_mode": "Rule"
+    },
+    "cache_file": {
+      "enabled": true,
+      "store_fakeip": true,
+      "store_dns": true
+    }
+  },
+  "services": [
+    {
+      "type": "api",
+      "listen": "::",
+      "listen_port": 9999,
+      "secret": "singbox",
+      "dashboard": {
+        "enabled": true,
+        "path": "dashboard",
+        "download_url": "https://gh-proxy.com/https://github.com/SagerNet/sing-box-dashboard/archive/refs/heads/gh-pages.zip",
+        "http_client": "default",
+        "update_interval": "1d"
+      }
+    }
+  ],
+  "http_clients": [
+    {
+      "tag": "default",
+      "version": 2,
+      "detour": "🚀 节点选择"
+    }
+  ],
   "dns": {
     "servers": [
+      {
+        "tag": "hosts_fix",
+        "type": "hosts",
+        "predefined": {
+          "dns.alidns.com": [
+            "223.5.5.5",
+            "223.6.6.6"
+          ],
+          "doh.pub": [
+            "1.12.12.21",
+            "120.53.53.53"
+          ],
+          "dns.google": [
+            "8.8.8.8",
+            "8.8.4.4"
+          ],
+          "cloudflare-dns.com": [
+            "104.16.248.249",
+            "104.16.249.249"
+          ]
+        }
+      },
+      {
+        "tag": "cf-doh",
+        "type": "https",
+        "server": "cloudflare-dns.com",
+        "detour": "🚀 节点选择",
+        "domain_resolver": "hosts_fix"
+      },
+      {
+        "tag": "gg-doh",
+        "type": "https",
+        "server": "dns.google",
+        "detour": "🚀 节点选择",
+        "domain_resolver": "hosts_fix"
+      },
+      {
+        "tag": "ali-doh",
+        "type": "https",
+        "server": "dns.alidns.com",
+        "domain_resolver": "hosts_fix"
+      },
+      {
+        "tag": "tx-doh",
+        "type": "https",
+        "server": "doh.pub",
+        "domain_resolver": "hosts_fix"
+      },
       {
         "tag": "ali-udp",
         "type": "udp",
         "server": "223.5.5.5"
       },
       {
-        "tag": "gg-doh",
-        "type": "https",
-        "server": "dns.google",
-        "detour": "🚀 节点选择"
+        "tag": "tx-udp",
+        "type": "udp",
+        "server": "119.29.29.29"
+      },
+      {
+        "tag": "remote",
+        "type": "fakeip",
+        "inet4_range": "198.18.0.0/15",
+        "inet6_range": "fc00::/18"
       },
       {
         "tag": "local",
@@ -35,12 +125,19 @@
       {
         "clash_mode": "Direct",
         "action": "route",
-        "server": "ali-udp"
+        "server": "local"
       },
       {
         "clash_mode": "Global",
         "action": "route",
-        "server": "gg-doh"
+        "server": "remote"
+      },
+      {
+        "rule_set": [
+          "AppleCN"
+        ],
+        "action": "route",
+        "server": "ali-doh"
       },
       {
         "type": "logical",
@@ -63,15 +160,65 @@
         "rule_set": [
           "ChinaDomain"
         ],
-        "action": "route",
-        "server": "ali-udp"
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "action": "evaluate",
+        "server": "ali-udp",
+        "tag": "ali-response",
+        "timeout": "3s"
       },
       {
         "rule_set": [
-          "AppleCN"
+          "ChinaDomain"
+        ],
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "action": "evaluate",
+        "server": "tx-udp",
+        "tag": "tx-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "ChinaDomain"
+        ],
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "match_response": "ali-response",
+        "ip_accept_any": true,
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "ChinaDomain"
+        ],
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "match_response": "tx-response",
+        "ip_accept_any": true,
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "ChinaDomain"
         ],
         "action": "route",
-        "server": "ali-udp"
+        "server": "ali-udp",
+        "timeout": "3s"
+      },
+      {
+        "query_type": "HTTPS",
+        "action": "reject"
       },
       {
         "domain_suffix": [
@@ -89,30 +236,19 @@
         "server": "local"
       },
       {
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
         "action": "route",
-        "server": "gg-doh"
+        "server": "remote",
+        "rewrite_ttl": 1
       }
     ],
-    "final": "gg-doh"
+    "optimistic": true,
+    "strategy": "prefer_ipv4",
+    "final": "ali-doh"
   },
-  "ntp": {
-    "enabled": true,
-    "server": "time.apple.com",
-    "server_port": 123,
-    "sync_interval": "10m",
-    "detour": "⚡ 全局直连"
-  },
-  "certificate": {},
-  "certificate_providers": [],
-  "http_clients": [
-    {
-      "tag": "default",
-      "version": 2,
-      "detour": "🚀 节点选择"
-    }
-  ],
-  "network_namespaces": [],
-  "endpoints": [],
   "inbounds": [
     {
       "tag": "tun-in",
@@ -141,19 +277,10 @@
   ],
   "outbounds": [
     {
-      "tag": "⚡ 全局直连",
-      "type": "direct"
-    },
-    {
-      "tag": "🛑 全局拦截",
-      "type": "block"
-    },
-    {
       "tag": "🚀 节点选择",
       "type": "selector",
-      "outbounds": [
-        "🎈 自动选择"
-      ],
+      "outbounds": [],
+      "default": "🎈 自动选择",
       "interrupt_exist_connections": true
     },
     {
@@ -168,6 +295,7 @@
       "tag": "🔍 谷歌服务",
       "type": "selector",
       "outbounds": [],
+      "default": "🎈 自动选择",
       "interrupt_exist_connections": true
     },
     {
@@ -176,25 +304,24 @@
       "outbounds": [
         "⚡ 全局直连"
       ],
+      "default": "🎈 自动选择",
       "interrupt_exist_connections": true
+    },
+    {
+      "tag": "🛑 全局拦截",
+      "type": "block"
+    },
+    {
+      "tag": "⚡ 全局直连",
+      "type": "direct"
     },
     {
       "tag": "🐟 漏网之鱼",
       "type": "selector",
       "outbounds": [
         "🚀 节点选择",
-        "⚡ 全局直连"
-      ],
-      "interrupt_exist_connections": true
-    },
-    {
-      "tag": "GLOBAL",
-      "type": "selector",
-      "outbounds": [
-        "🚀 节点选择",
         "⚡ 全局直连",
-        "🛑 全局拦截",
-        "🐟 漏网之鱼"
+        "🛑 全局拦截"
       ],
       "interrupt_exist_connections": true
     }
@@ -228,19 +355,11 @@
         "outbound": "⚡ 全局直连"
       },
       {
-        "clash_mode": "Global",
-        "action": "route",
-        "outbound": "GLOBAL"
-      },
-      {
-        "network": "icmp",
+        "rule_set": [
+          "AppleCN"
+        ],
         "action": "route",
         "outbound": "⚡ 全局直连"
-      },
-      {
-        "protocol": "quic",
-        "action": "route",
-        "outbound": "🛑 全局拦截"
       },
       {
         "type": "logical",
@@ -260,26 +379,11 @@
         "action": "reject"
       },
       {
-        "domain_suffix": [
-          "superfj.com"
+        "rule_set": [
+          "AI"
         ],
         "action": "route",
         "outbound": "🤖 AI服务"
-      },
-      {
-        "ip_cidr": [
-          "207.57.123.187/32",
-          "2001:df1:7880:6::c4/128"
-        ],
-        "action": "route",
-        "outbound": "🤖 AI服务"
-      },
-      {
-        "domain_suffix": [
-          "gemini.google.com"
-        ],
-        "action": "route",
-        "outbound": "🔍 谷歌服务"
       },
       {
         "rule_set": [
@@ -303,13 +407,6 @@
         ],
         "action": "route",
         "outbound": "🚀 节点选择"
-      },
-      {
-        "rule_set": [
-          "AppleCN"
-        ],
-        "action": "route",
-        "outbound": "⚡ 全局直连"
       },
       {
         "rule_set": [
@@ -341,6 +438,7 @@
           "Reject",
           "Ads_AWAvenue",
           "Proxy",
+          "AI",
           "Google",
           "YouTube",
           "Github",
@@ -354,35 +452,5 @@
         "update_interval": "24h"
       }
     ]
-  },
-  "services": [
-    {
-      "type": "api",
-      "listen": "::",
-      "listen_port": 9999,
-      "secret": "singbox",
-      "dashboard": {
-        "enabled": true,
-        "path": "dashboard",
-        "download_url": "https://gh-proxy.com/https://github.com/SagerNet/sing-box-dashboard/archive/refs/heads/gh-pages.zip",
-        "http_client": "default",
-        "update_interval": "1d"
-      }
-    }
-  ],
-  "experimental": {
-    "clash_api": {
-      "external_controller": "127.0.0.1:9090",
-      "external_ui": "zashboard",
-      "secret": "singbox",
-      "external_ui_download_url": "https://gh-proxy.com/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
-      "external_ui_download_detour": "⚡ 全局直连",
-      "default_mode": "Rule"
-    },
-    "cache_file": {
-      "enabled": true,
-      "store_fakeip": true,
-      "store_dns": true
-    }
   }
 }
