@@ -1,0 +1,388 @@
+{
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "ali-udp",
+        "type": "udp",
+        "server": "223.5.5.5"
+      },
+      {
+        "tag": "gg-doh",
+        "type": "https",
+        "server": "dns.google",
+        "detour": "🚀 节点选择"
+      },
+      {
+        "tag": "local",
+        "type": "local",
+        "neighbor_domain": [
+          ".local",
+          ".lan"
+        ]
+      }
+    ],
+    "rules": [
+      {
+        "rule_set": [
+          "Reject"
+        ],
+        "action": "predefined"
+      },
+      {
+        "clash_mode": "Direct",
+        "action": "route",
+        "server": "ali-udp"
+      },
+      {
+        "clash_mode": "Global",
+        "action": "route",
+        "server": "gg-doh"
+      },
+      {
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "clash_mode": "AllowAds",
+            "invert": true
+          },
+          {
+            "rule_set": [
+              "Reject",
+              "Ads_AWAvenue"
+            ]
+          }
+        ],
+        "action": "reject"
+      },
+      {
+        "rule_set": [
+          "ChinaDomain"
+        ],
+        "action": "route",
+        "server": "ali-udp"
+      },
+      {
+        "rule_set": [
+          "AppleCN"
+        ],
+        "action": "route",
+        "server": "ali-udp"
+      },
+      {
+        "domain_suffix": [
+          "lancache.steamcontent.com",
+          "10099.com.cn",
+          "msftconnecttest.com",
+          "msftncsi.com",
+          "local",
+          "lan",
+          "home",
+          "internal",
+          "corp",
+          "example.com"
+        ],
+        "server": "local"
+      },
+      {
+        "action": "route",
+        "server": "gg-doh"
+      }
+    ],
+    "final": "gg-doh"
+  },
+  "ntp": {
+    "enabled": true,
+    "server": "time.apple.com",
+    "server_port": 123,
+    "sync_interval": "10m",
+    "detour": "⚡ 全局直连"
+  },
+  "certificate": {},
+  "certificate_providers": [],
+  "http_clients": [
+    {
+      "tag": "default",
+      "version": 2,
+      "detour": "🚀 节点选择"
+    }
+  ],
+  "network_namespaces": [],
+  "endpoints": [],
+  "inbounds": [
+    {
+      "tag": "tun-in",
+      "type": "tun",
+      "address": [
+        "172.19.0.0/30",
+        "fdfe:dcba:9876::0/126"
+      ],
+      "stack": "system",
+      "auto_route": true,
+      "strict_route": true,
+      "platform": {
+        "http_proxy": {
+          "enabled": true,
+          "server": "127.0.0.1",
+          "server_port": 7890
+        }
+      }
+    },
+    {
+      "tag": "mixed-in",
+      "type": "mixed",
+      "listen": "127.0.0.1",
+      "listen_port": 7890
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "⚡ 全局直连",
+      "type": "direct"
+    },
+    {
+      "tag": "🛑 全局拦截",
+      "type": "block"
+    },
+    {
+      "tag": "🚀 节点选择",
+      "type": "selector",
+      "outbounds": [
+        "🎈 自动选择"
+      ],
+      "interrupt_exist_connections": true
+    },
+    {
+      "tag": "🎈 自动选择",
+      "type": "urltest",
+      "outbounds": [],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "10m",
+      "tolerance": 50
+    },
+    {
+      "tag": "🔍 谷歌服务",
+      "type": "selector",
+      "outbounds": [],
+      "interrupt_exist_connections": true
+    },
+    {
+      "tag": "🤖 AI服务",
+      "type": "selector",
+      "outbounds": [
+        "⚡ 全局直连"
+      ],
+      "interrupt_exist_connections": true
+    },
+    {
+      "tag": "🐟 漏网之鱼",
+      "type": "selector",
+      "outbounds": [
+        "🚀 节点选择",
+        "⚡ 全局直连"
+      ],
+      "interrupt_exist_connections": true
+    },
+    {
+      "tag": "GLOBAL",
+      "type": "selector",
+      "outbounds": [
+        "🚀 节点选择",
+        "⚡ 全局直连",
+        "🛑 全局拦截",
+        "🐟 漏网之鱼"
+      ],
+      "interrupt_exist_connections": true
+    }
+  ],
+  "route": {
+    "default_domain_resolver": "ali-udp",
+    "default_http_client": "default",
+    "auto_detect_interface": true,
+    "find_process": true,
+    "final": "🐟 漏网之鱼",
+    "rules": [
+      {
+        "action": "sniff"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": 53
+          },
+          {
+            "protocol": "dns"
+          }
+        ],
+        "action": "hijack-dns"
+      },
+      {
+        "clash_mode": "Direct",
+        "action": "route",
+        "outbound": "⚡ 全局直连"
+      },
+      {
+        "clash_mode": "Global",
+        "action": "route",
+        "outbound": "GLOBAL"
+      },
+      {
+        "network": "icmp",
+        "action": "route",
+        "outbound": "⚡ 全局直连"
+      },
+      {
+        "protocol": "quic",
+        "action": "route",
+        "outbound": "🛑 全局拦截"
+      },
+      {
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "clash_mode": "AllowAds",
+            "invert": true
+          },
+          {
+            "rule_set": [
+              "Reject",
+              "Ads_AWAvenue"
+            ]
+          }
+        ],
+        "action": "reject"
+      },
+      {
+        "domain_suffix": [
+          "superfj.com"
+        ],
+        "action": "route",
+        "outbound": "🤖 AI服务"
+      },
+      {
+        "ip_cidr": [
+          "207.57.123.187/32",
+          "2001:df1:7880:6::c4/128"
+        ],
+        "action": "route",
+        "outbound": "🤖 AI服务"
+      },
+      {
+        "domain_suffix": [
+          "gemini.google.com"
+        ],
+        "action": "route",
+        "outbound": "🔍 谷歌服务"
+      },
+      {
+        "rule_set": [
+          "Google",
+          "YouTube",
+          "Github"
+        ],
+        "action": "route",
+        "outbound": "🔍 谷歌服务"
+      },
+      {
+        "rule_set": [
+          "ChinaDomain"
+        ],
+        "action": "route",
+        "outbound": "⚡ 全局直连"
+      },
+      {
+        "rule_set": [
+          "Proxy"
+        ],
+        "action": "route",
+        "outbound": "🚀 节点选择"
+      },
+      {
+        "rule_set": [
+          "AppleCN"
+        ],
+        "action": "route",
+        "outbound": "⚡ 全局直连"
+      },
+      {
+        "rule_set": [
+          "AppleProxy"
+        ],
+        "action": "route",
+        "outbound": "🚀 节点选择"
+      },
+      {
+        "action": "resolve"
+      },
+      {
+        "rule_set": [
+          "ChinaIP"
+        ],
+        "action": "route",
+        "outbound": "⚡ 全局直连"
+      },
+      {
+        "ip_is_private": true,
+        "action": "route",
+        "outbound": "⚡ 全局直连"
+      }
+    ],
+    "rule_set": [
+      {
+        "type": "remote",
+        "tag": [
+          "Reject",
+          "Ads_AWAvenue",
+          "Proxy",
+          "Google",
+          "YouTube",
+          "Github",
+          "AppleCN",
+          "AppleProxy",
+          "ChinaDomain",
+          "ChinaIP"
+        ],
+        "format": "binary",
+        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/Repcz/Tool/X/sing-box/Rules/{tag}.srs",
+        "update_interval": "24h"
+      }
+    ]
+  },
+  "services": [
+    {
+      "type": "api",
+      "listen": "::",
+      "listen_port": 9999,
+      "secret": "singbox",
+      "dashboard": {
+        "enabled": true,
+        "path": "dashboard",
+        "download_url": "https://gh-proxy.com/https://github.com/SagerNet/sing-box-dashboard/archive/refs/heads/gh-pages.zip",
+        "http_client": "default",
+        "update_interval": "1d"
+      }
+    }
+  ],
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "zashboard",
+      "secret": "singbox",
+      "external_ui_download_url": "https://gh-proxy.com/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
+      "external_ui_download_detour": "⚡ 全局直连",
+      "default_mode": "Rule"
+    },
+    "cache_file": {
+      "enabled": true,
+      "store_fakeip": true,
+      "store_dns": true
+    }
+  }
+}
