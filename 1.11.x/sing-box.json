@@ -60,6 +60,13 @@
       {
         "action": "route",
         "rule_set": [
+          "apple-cn"
+        ],
+        "server": "Local-DNS"
+      },
+      {
+        "action": "route",
+        "rule_set": [
           "GeoLocation-!CN"
         ],
         "server": "Remote-DNS"
@@ -204,6 +211,13 @@
       {
         "action": "route",
         "rule_set": [
+          "apple-cn"
+        ],
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "action": "route",
+        "rule_set": [
           "GeoIP-Private"
         ],
         "outbound": "🎯 全球直连"
@@ -256,6 +270,13 @@
         "tag": "GeoLocation-!CN",
         "type": "remote",
         "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/geolocation-!cn.srs",
+        "format": "binary",
+        "download_detour": "🎯 全球直连"
+      },
+      {
+        "tag": "apple-cn",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/apple-cn.srs",
         "format": "binary",
         "download_detour": "🎯 全球直连"
       }
