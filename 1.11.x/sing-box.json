@@ -60,7 +60,7 @@
       {
         "action": "route",
         "rule_set": [
-          "apple-cn"
+          "apple"
         ],
         "server": "Local-DNS"
       },
@@ -211,7 +211,7 @@
       {
         "action": "route",
         "rule_set": [
-          "apple-cn"
+          "apple"
         ],
         "outbound": "🎯 全球直连"
       },
@@ -274,9 +274,9 @@
         "download_detour": "🎯 全球直连"
       },
       {
-        "tag": "apple-cn",
+        "tag": "apple",
         "type": "remote",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/apple-cn.srs",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/apple.srs",
         "format": "binary",
         "download_detour": "🎯 全球直连"
       }
