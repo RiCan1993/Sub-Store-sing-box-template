@@ -270,14 +270,6 @@
       "tolerance": 50
     },
     {
-      "tag": "🔍 谷歌服务",
-      "type": "selector",
-      "outbounds": [
-        "🎈 自动选择"
-      ],
-      "interrupt_exist_connections": true
-    },
-    {
       "tag": "🤖 AI服务",
       "type": "selector",
       "outbounds": [
@@ -354,15 +346,6 @@
         ],
         "action": "route",
         "outbound": "🤖 AI服务"
-      },
-      {
-        "rule_set": [
-          "Google",
-          "YouTube",
-          "Github"
-        ],
-        "action": "route",
-        "outbound": "🔍 谷歌服务"
       },
       {
         "rule_set": [

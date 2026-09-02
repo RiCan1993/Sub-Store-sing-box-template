@@ -25,9 +25,6 @@ config.outbounds.forEach(outbound => {
   if (outbound.type === 'urltest' && outbound.tag === '🎈 自动选择') {
     outbound.outbounds.push(...proxyTags)
   }
-  if (outbound.type === 'selector' && outbound.tag === '🔍 谷歌服务') {
-    outbound.outbounds.push(...proxyTags)
-  }
   if (outbound.type === 'selector' && outbound.tag === '🤖 AI服务') {
     outbound.outbounds.push(...proxyTags)
   }
