@@ -9,7 +9,7 @@
       "external_ui": "zashboard",
       "secret": "singbox",
       "external_ui_download_url": "https://gh-proxy.com/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
-      "external_ui_download_detour": "⚡ 全局直连",
+      "external_ui_download_detour": "⚡ 全球直连",
       "default_mode": "Rule"
     },
     "cache_file": {
@@ -282,7 +282,7 @@
       "type": "selector",
       "outbounds": [
         "🎈 自动选择",
-        "⚡ 全局直连"
+        "⚡ 全球直连"
       ],
       "interrupt_exist_connections": true
     },
@@ -291,7 +291,7 @@
       "type": "block"
     },
     {
-      "tag": "⚡ 全局直连",
+      "tag": "⚡ 全球直连",
       "type": "direct"
     },
     {
@@ -299,7 +299,7 @@
       "type": "selector",
       "outbounds": [
         "🚀 节点选择",
-        "⚡ 全局直连",
+        "⚡ 全球直连",
         "🛑 全局拦截"
       ],
       "interrupt_exist_connections": true
@@ -331,14 +331,14 @@
       {
         "clash_mode": "Direct",
         "action": "route",
-        "outbound": "⚡ 全局直连"
+        "outbound": "⚡ 全球直连"
       },
       {
         "rule_set": [
           "AppleCN"
         ],
         "action": "route",
-        "outbound": "⚡ 全局直连"
+        "outbound": "⚡ 全球直连"
       },
       {
         "domain_suffix": [
@@ -369,7 +369,7 @@
           "ChinaDomain"
         ],
         "action": "route",
-        "outbound": "⚡ 全局直连"
+        "outbound": "⚡ 全球直连"
       },
       {
         "rule_set": [
@@ -393,12 +393,12 @@
           "ChinaIP"
         ],
         "action": "route",
-        "outbound": "⚡ 全局直连"
+        "outbound": "⚡ 全球直连"
       },
       {
         "ip_is_private": true,
         "action": "route",
-        "outbound": "⚡ 全局直连"
+        "outbound": "⚡ 全球直连"
       }
     ],
     "rule_set": [
