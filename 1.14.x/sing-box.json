@@ -20,21 +20,6 @@
       "store_dns": true
     }
   },
-  "services": [
-    {
-      "type": "api",
-      "listen": "::",
-      "listen_port": 9999,
-      "secret": "singbox",
-      "dashboard": {
-        "enabled": true,
-        "path": "dashboard",
-        "download_url": "https://gh-proxy.com/https://github.com/SagerNet/sing-box-dashboard/archive/refs/heads/gh-pages.zip",
-        "http_client": "default",
-        "update_interval": "1d"
-      }
-    }
-  ],
   "http_clients": [
     {
       "tag": "default",
