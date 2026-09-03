@@ -1,7 +1,9 @@
 {
   "log": {
+    "disabled": false,
     "level": "info",
-    "timestamp": true
+    "output": "",
+    "timestamp": false
   },
   "experimental": {
     "clash_api": {
@@ -138,13 +140,19 @@
   },
   "inbounds": [
     {
+      "tag": "mixed-in",
+      "type": "mixed",
+      "listen": "0.0.0.0",
+      "listen_port": 7890
+    },
+    {
       "tag": "tun-in",
       "type": "tun",
       "address": [
         "172.19.0.0/30",
         "fdfe:dcba:9876::0/126"
       ],
-      "stack": "system",
+      "stack": "mixed",
       "auto_route": true,
       "strict_route": true,
       "platform": {
@@ -154,12 +162,6 @@
           "server_port": 7890
         }
       }
-    },
-    {
-      "tag": "mixed-in",
-      "type": "mixed",
-      "listen": "127.0.0.1",
-      "listen_port": 7890
     }
   ],
   "outbounds": [
