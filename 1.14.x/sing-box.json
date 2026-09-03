@@ -91,14 +91,14 @@
       },
       {
         "rule_set": [
-          "AppleCN"
+          "GeoSite-Apple-CN"
         ],
         "action": "route",
         "server": "Local-DNS"
       },
       {
         "rule_set": [
-          "ChinaDomain"
+          "GeoSite-CN"
         ],
         "action": "route",
         "server": "Local-DNS"
@@ -237,7 +237,7 @@
       },
       {
         "rule_set": [
-          "AppleCN"
+          "GeoSite-Apple-CN"
         ],
         "action": "route",
         "outbound": "⚡ 全球直连"
@@ -259,31 +259,17 @@
       },
       {
         "rule_set": [
-          "ChinaDomain"
+          "GeoSite-CN"
         ],
         "action": "route",
         "outbound": "⚡ 全球直连"
-      },
-      {
-        "rule_set": [
-          "Proxy"
-        ],
-        "action": "route",
-        "outbound": "🚀 节点选择"
-      },
-      {
-        "rule_set": [
-          "AppleProxy"
-        ],
-        "action": "route",
-        "outbound": "🚀 节点选择"
       },
       {
         "action": "resolve"
       },
       {
         "rule_set": [
-          "ChinaIP"
+          "GeoIP-CN"
         ],
         "action": "route",
         "outbound": "⚡ 全球直连"
@@ -296,19 +282,31 @@
     ],
     "rule_set": [
       {
+        "tag": "GeoSite-CN",
         "type": "remote",
-        "tag": [
-          "Proxy",
-          "Google",
-          "YouTube",
-          "Github",
-          "AppleCN",
-          "AppleProxy",
-          "ChinaDomain",
-          "ChinaIP"
-        ],
+        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
         "format": "binary",
-        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/Repcz/Tool/X/sing-box/Rules/{tag}.srs",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "GeoSite-Apple-CN",
+        "type": "remote",
+        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple-cn.srs",
+        "format": "binary",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "GeoIP-CN",
+        "type": "remote",
+        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cn.srs",
+        "format": "binary",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "GeoIP-Private",
+        "type": "remote",
+        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
+        "format": "binary",
         "update_interval": "24h"
       }
     ]
