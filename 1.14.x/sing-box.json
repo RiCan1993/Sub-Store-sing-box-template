@@ -224,18 +224,6 @@
         "🚀 节点选择",
         "🎯 全球直连"
       ]
-    },
-    {
-      "type": "selector",
-      "tag": "GLOBAL",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "🚀 节点选择",
-        "🎈 自动选择",
-        "🎯 全球直连",
-        "🛑 全球拦截",
-        "🐟 漏网之鱼"
-      ]
     }
   ],
   "route": {
@@ -259,16 +247,6 @@
       {
         "action": "hijack-dns",
         "protocol": "dns"
-      },
-      {
-        "action": "route",
-        "clash_mode": "direct",
-        "outbound": "🎯 全球直连"
-      },
-      {
-        "action": "route",
-        "clash_mode": "global",
-        "outbound": "GLOBAL"
       },
       {
         "action": "route",
