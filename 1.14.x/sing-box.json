@@ -91,6 +91,34 @@
         ],
         "action": "route",
         "server": "Local-DNS"
+      },
+      {
+        "query_type": "HTTPS",
+        "action": "reject"
+      },
+      {
+        "domain_suffix": [
+          "lancache.steamcontent.com",
+          "10099.com.cn",
+          "msftconnecttest.com",
+          "msftncsi.com",
+          "local",
+          "lan",
+          "home",
+          "internal",
+          "corp",
+          "example.com"
+        ],
+        "server": "Local-DNS"
+      },
+      {
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "action": "route",
+        "server": "Fake-IP",
+        "rewrite_ttl": 1
       }
     ],
     "optimistic": true,
