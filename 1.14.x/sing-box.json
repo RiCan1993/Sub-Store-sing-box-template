@@ -246,25 +246,39 @@
     "final": "🐟 漏网之鱼",
     "rules": [
       {
-        "action": "sniff"
+        "action": "sniff",
+        "inbound": "tun-in"
       },
       {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "port": 53
-          },
-          {
-            "protocol": "dns"
-          }
+        "rule_set": [
+          "GeoSite-Ads"
         ],
-        "action": "hijack-dns"
+        "action": "route",
+        "outbound": "🛑 全球拦截"
       },
       {
-        "clash_mode": "Direct",
+        "action": "hijack-dns",
+        "protocol": "dns"
+      },
+      {
         "action": "route",
+        "clash_mode": "direct",
         "outbound": "🎯 全球直连"
+      },
+      {
+        "action": "route",
+        "clash_mode": "global",
+        "outbound": "GLOBAL"
+      },
+      {
+        "action": "route",
+        "network": "icmp",
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "action": "route",
+        "protocol": "quic",
+        "outbound": "🛑 全球拦截"
       },
       {
         "rule_set": [
@@ -300,18 +314,27 @@
       },
       {
         "rule_set": [
-          "GeoIP-CN"
+          "GeoIP-Private"
         ],
         "action": "route",
         "outbound": "🎯 全球直连"
       },
       {
-        "ip_is_private": true,
+        "rule_set": [
+          "GeoIP-CN"
+        ],
         "action": "route",
         "outbound": "🎯 全球直连"
       }
     ],
     "rule_set": [
+      {
+        "tag": "GeoSite-Ads",
+        "type": "remote",
+        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads.srs",
+        "format": "binary",
+        "update_interval": "24h"
+      },
       {
         "tag": "GeoSite-CN",
         "type": "remote",
