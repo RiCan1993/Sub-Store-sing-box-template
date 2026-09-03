@@ -11,7 +11,7 @@
       "external_ui": "zashboard",
       "secret": "singbox",
       "external_ui_download_url": "https://gh-proxy.com/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
-      "external_ui_download_detour": "⚡ 全球直连",
+      "external_ui_download_detour": "🎯 全球直连",
       "default_mode": "Rule"
     },
     "cache_file": {
@@ -166,47 +166,68 @@
   ],
   "outbounds": [
     {
-      "tag": "🚀 节点选择",
       "type": "selector",
+      "tag": "🚀 节点选择",
+      "interrupt_exist_connections": true,
       "outbounds": [
         "🎈 自动选择"
-      ],
-      "interrupt_exist_connections": true
+      ]
     },
     {
-      "tag": "🎈 自动选择",
       "type": "urltest",
-      "outbounds": [],
+      "tag": "🎈 自动选择",
       "url": "http://www.gstatic.com/generate_204",
       "interval": "10m",
-      "tolerance": 50
+      "tolerance": 50,
+      "outbounds": []
     },
     {
-      "tag": "🤖 AI服务",
       "type": "selector",
+      "tag": "🤖 AI服务",
+      "interrupt_exist_connections": true,
       "outbounds": [
         "🎈 自动选择",
-        "⚡ 全球直连"
-      ],
-      "interrupt_exist_connections": true
+        "🎯 全球直连"
+      ]
     },
     {
-      "tag": "🛑 全局拦截",
-      "type": "block"
-    },
-    {
-      "tag": "⚡ 全球直连",
-      "type": "direct"
-    },
-    {
-      "tag": "🐟 漏网之鱼",
       "type": "selector",
+      "tag": "🎯 全球直连",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "direct",
+        "block"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "🛑 全球拦截",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "block",
+        "direct"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "🐟 漏网之鱼",
+      "interrupt_exist_connections": true,
       "outbounds": [
         "🚀 节点选择",
-        "⚡ 全球直连",
-        "🛑 全局拦截"
-      ],
-      "interrupt_exist_connections": true
+        "🎯 全球直连"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "GLOBAL",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "🚀 节点选择",
+        "🎈 自动选择",
+        "🎯 全球直连",
+        "🛑 全球拦截",
+        "🐟 漏网之鱼"
+      ]
     }
   ],
   "route": {
@@ -235,14 +256,14 @@
       {
         "clash_mode": "Direct",
         "action": "route",
-        "outbound": "⚡ 全球直连"
+        "outbound": "🎯 全球直连"
       },
       {
         "rule_set": [
           "GeoSite-Apple-CN"
         ],
         "action": "route",
-        "outbound": "⚡ 全球直连"
+        "outbound": "🎯 全球直连"
       },
       {
         "domain_suffix": [
@@ -264,7 +285,7 @@
           "GeoSite-CN"
         ],
         "action": "route",
-        "outbound": "⚡ 全球直连"
+        "outbound": "🎯 全球直连"
       },
       {
         "action": "resolve"
@@ -274,12 +295,12 @@
           "GeoIP-CN"
         ],
         "action": "route",
-        "outbound": "⚡ 全球直连"
+        "outbound": "🎯 全球直连"
       },
       {
         "ip_is_private": true,
         "action": "route",
-        "outbound": "⚡ 全球直连"
+        "outbound": "🎯 全球直连"
       }
     ],
     "rule_set": [
