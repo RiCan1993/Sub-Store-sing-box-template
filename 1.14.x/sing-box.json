@@ -7,9 +7,11 @@
   },
   "experimental": {
     "clash_api": {
-      "external_controller": "0.0.0.0:9090",
-      "external_ui": "dashboard",
-      "secret": "singbox",
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "yacd-meta",
+      "external_ui_download_url": "https://github.com/MetaCubeX/Yacd-meta/archive/gh-pages.zip",
+      "external_ui_download_detour": "🚀 节点选择",
+      "secret": "fe2d464d6f919ab743b2591e60b9fe63",
       "default_mode": "Rule"
     },
     "cache_file": {
@@ -21,8 +23,11 @@
   "http_clients": [
     {
       "tag": "default",
-      "version": 2,
       "detour": "🚀 节点选择"
+    },
+    {
+      "tag": "🎯 全球直连",
+      "detour": "🎯 全球直连"
     }
   ],
   "dns": {
@@ -118,7 +123,6 @@
       }
     ],
     "optimistic": true,
-    "strategy": "prefer_ipv4",
     "final": "Remote-DNS"
   },
   "inbounds": [
@@ -294,6 +298,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads.srs",
         "format": "binary",
+        "http_client": "🎯 全球直连",
         "update_interval": "24h"
       },
       {
@@ -301,6 +306,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
         "format": "binary",
+        "http_client": "🎯 全球直连",
         "update_interval": "24h"
       },
       {
@@ -308,6 +314,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple-cn.srs",
         "format": "binary",
+        "http_client": "🎯 全球直连",
         "update_interval": "24h"
       },
       {
@@ -315,6 +322,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cn.srs",
         "format": "binary",
+        "http_client": "🎯 全球直连",
         "update_interval": "24h"
       },
       {
@@ -322,6 +330,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
         "format": "binary",
+        "http_client": "🎯 全球直连",
         "update_interval": "24h"
       }
     ]
