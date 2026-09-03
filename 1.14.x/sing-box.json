@@ -43,155 +43,65 @@
   "dns": {
     "servers": [
       {
-        "tag": "hosts_fix",
-        "type": "hosts",
-        "predefined": {
-          "dns.alidns.com": [
-            "223.5.5.5",
-            "223.6.6.6"
-          ],
-          "doh.pub": [
-            "1.12.12.21",
-            "120.53.53.53"
-          ],
-          "dns.google": [
-            "8.8.8.8",
-            "8.8.4.4"
-          ],
-          "cloudflare-dns.com": [
-            "104.16.248.249",
-            "104.16.249.249"
-          ]
-        }
-      },
-      {
-        "tag": "cf-doh",
-        "type": "https",
-        "server": "cloudflare-dns.com",
-        "detour": "🚀 节点选择",
-        "domain_resolver": "hosts_fix"
-      },
-      {
-        "tag": "gg-doh",
-        "type": "https",
-        "server": "dns.google",
-        "detour": "🚀 节点选择",
-        "domain_resolver": "hosts_fix"
-      },
-      {
-        "tag": "ali-doh",
-        "type": "https",
-        "server": "dns.alidns.com",
-        "domain_resolver": "hosts_fix"
-      },
-      {
-        "tag": "tx-doh",
-        "type": "https",
-        "server": "doh.pub",
-        "domain_resolver": "hosts_fix"
-      },
-      {
-        "tag": "ali-udp",
-        "type": "udp",
-        "server": "223.5.5.5"
-      },
-      {
-        "tag": "tx-udp",
-        "type": "udp",
-        "server": "119.29.29.29"
-      },
-      {
-        "tag": "remote",
+        "tag": "Fake-IP",
         "type": "fakeip",
         "inet4_range": "198.18.0.0/15",
         "inet6_range": "fc00::/18"
       },
       {
-        "tag": "local",
-        "type": "local",
-        "neighbor_domain": [
-          ".local",
-          ".lan"
-        ]
+        "tag": "Local-DNS",
+        "type": "https",
+        "domain_resolver": "Local-DNS-Resolver",
+        "server_port": 443,
+        "server": "223.5.5.5",
+        "path": "/dns-query"
+      },
+      {
+        "tag": "Local-DNS-Resolver",
+        "type": "udp",
+        "server_port": 53,
+        "server": "223.5.5.5"
+      },
+      {
+        "tag": "Remote-DNS",
+        "type": "tls",
+        "detour": "🚀 节点选择",
+        "domain_resolver": "Remote-DNS-Resolver",
+        "server_port": 853,
+        "server": "8.8.8.8"
+      },
+      {
+        "tag": "Remote-DNS-Resolver",
+        "type": "udp",
+        "detour": "🚀 节点选择",
+        "server_port": 53,
+        "server": "8.8.8.8"
       }
     ],
     "rules": [
       {
         "clash_mode": "Direct",
         "action": "route",
-        "server": "local"
+        "server": "Local-DNS"
       },
       {
         "clash_mode": "Global",
         "action": "route",
-        "server": "remote"
+        "server": "Fake-IP"
       },
       {
         "rule_set": [
           "AppleCN"
         ],
         "action": "route",
-        "server": "ali-doh"
-      },
-      {
-        "rule_set": [
-          "ChinaDomain"
-        ],
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
-        "action": "evaluate",
-        "server": "ali-udp",
-        "tag": "ali-response",
-        "timeout": "3s"
-      },
-      {
-        "rule_set": [
-          "ChinaDomain"
-        ],
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
-        "action": "evaluate",
-        "server": "tx-udp",
-        "tag": "tx-response",
-        "timeout": "3s"
-      },
-      {
-        "rule_set": [
-          "ChinaDomain"
-        ],
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
-        "match_response": "ali-response",
-        "ip_accept_any": true,
-        "action": "respond",
-        "race": true
-      },
-      {
-        "rule_set": [
-          "ChinaDomain"
-        ],
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
-        "match_response": "tx-response",
-        "ip_accept_any": true,
-        "action": "respond",
-        "race": true
+        "server": "Local-DNS"
       },
       {
         "rule_set": [
           "ChinaDomain"
         ],
         "action": "route",
-        "server": "ali-udp",
-        "timeout": "3s"
+        "server": "Local-DNS"
       },
       {
         "query_type": "HTTPS",
@@ -210,7 +120,7 @@
           "corp",
           "example.com"
         ],
-        "server": "local"
+        "server": "Local-DNS"
       },
       {
         "query_type": [
@@ -218,13 +128,13 @@
           "AAAA"
         ],
         "action": "route",
-        "server": "remote",
+        "server": "Fake-IP",
         "rewrite_ttl": 1
       }
     ],
     "optimistic": true,
     "strategy": "prefer_ipv4",
-    "final": "ali-doh"
+    "final": "Remote-DNS"
   },
   "inbounds": [
     {
@@ -298,7 +208,7 @@
     }
   ],
   "route": {
-    "default_domain_resolver": "ali-udp",
+    "default_domain_resolver": "Local-DNS-Resolver",
     "default_http_client": "default",
     "auto_detect_interface": true,
     "find_process": true,
