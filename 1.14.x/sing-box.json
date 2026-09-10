@@ -359,7 +359,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/gfw.srs",
         "format": "binary",
-        "http_client": "🚀 节点选择",
+        "http_client": "🎯 全球直连",
         "update_interval": "24h"
       }
     ]
