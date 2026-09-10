@@ -101,6 +101,13 @@
         "server": "Local-DNS"
       },
       {
+        "rule_set": [
+          "GFW"
+        ],
+        "action": "route",
+        "server": "Remote-DNS"
+      },
+      {
         "query_type": "HTTPS",
         "action": "reject"
       },
@@ -260,6 +267,13 @@
         "outbound": "🎯 全球直连"
       },
       {
+        "rule_set": [
+          "GFW"
+        ],
+        "action": "route",
+        "outbound": "🚀 节点选择"
+      },
+      {
         "domain_suffix": [
           "superfj.com"
         ],
@@ -338,6 +352,14 @@
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
         "format": "binary",
         "http_client": "🎯 全球直连",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "GFW",
+        "type": "remote",
+        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/gfw.srs",
+        "format": "binary",
+        "http_client": "🚀 节点选择",
         "update_interval": "24h"
       }
     ]
