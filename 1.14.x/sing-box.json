@@ -141,7 +141,8 @@
       }
     ],
     "optimistic": true,
-    "final": "Remote-DNS"
+    "final": "Remote-DNS",
+    "strategy": "prefer_ipv4"
   },
   "inbounds": [
     {
