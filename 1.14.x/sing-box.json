@@ -23,7 +23,6 @@
   "experimental": {
     "cache_file": {
       "enabled": true,
-      "store_fakeip": true,
       "store_dns": true
     }
   },
@@ -44,38 +43,17 @@
   "dns": {
     "servers": [
       {
-        "tag": "Fake-IP",
-        "type": "fakeip",
-        "inet4_range": "198.18.0.0/15",
-        "inet6_range": "fc00::/18"
-      },
-      {
         "tag": "Local-DNS",
         "type": "https",
-        "domain_resolver": "Local-DNS-Resolver",
         "server_port": 443,
         "server": "223.5.5.5",
         "path": "/dns-query"
       },
       {
-        "tag": "Local-DNS-Resolver",
-        "type": "udp",
-        "server_port": 53,
-        "server": "223.5.5.5"
-      },
-      {
         "tag": "Remote-DNS",
         "type": "tls",
         "detour": "🚀 节点选择",
-        "domain_resolver": "Remote-DNS-Resolver",
         "server_port": 853,
-        "server": "8.8.8.8"
-      },
-      {
-        "tag": "Remote-DNS-Resolver",
-        "type": "udp",
-        "detour": "🚀 节点选择",
-        "server_port": 53,
         "server": "8.8.8.8"
       }
     ],
@@ -92,13 +70,7 @@
       },
       {
         "rule_set": [
-          "GeoSite-Apple-CN"
-        ],
-        "action": "route",
-        "server": "Local-DNS"
-      },
-      {
-        "rule_set": [
+          "GeoSite-Apple-CN",
           "GeoSite-CN"
         ],
         "action": "route",
@@ -129,15 +101,6 @@
           "example.com"
         ],
         "server": "Local-DNS"
-      },
-      {
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
-        "action": "route",
-        "server": "Fake-IP",
-        "rewrite_ttl": 1
       }
     ],
     "optimistic": true,
@@ -233,7 +196,7 @@
     }
   ],
   "route": {
-    "default_domain_resolver": "Local-DNS-Resolver",
+    "default_domain_resolver": "Local-DNS",
     "default_http_client": "default",
     "auto_detect_interface": true,
     "find_process": true,
@@ -265,13 +228,6 @@
         "outbound": "🛑 全球拦截"
       },
       {
-        "rule_set": [
-          "GeoSite-Apple-CN"
-        ],
-        "action": "route",
-        "outbound": "🎯 全球直连"
-      },
-      {
         "domain_suffix": [
           "superfj.com"
         ],
@@ -280,32 +236,16 @@
       },
       {
         "ip_cidr": [
-          "207.57.123.187",
-          "2001:df1:7880:6::c4"
+          "207.57.123.187/32",
+          "2001:df1:7880:6::c4/128"
         ],
         "action": "route",
         "outbound": "🤖 AI服务"
       },
       {
         "rule_set": [
-          "GeoSite-CN"
-        ],
-        "action": "route",
-        "outbound": "🎯 全球直连"
-      },
-      {
-        "action": "resolve"
-      },
-      {
-        "rule_set": [
-          "GeoIP-Private"
-        ],
-        "action": "route",
-        "outbound": "🎯 全球直连"
-      },
-      {
-        "rule_set": [
-          "GeoIP-CN"
+          "GeoSite-CN",
+          "GeoSite-Apple-CN"
         ],
         "action": "route",
         "outbound": "🎯 全球直连"
@@ -316,6 +256,17 @@
         ],
         "action": "route",
         "outbound": "🚀 节点选择"
+      },
+      {
+        "action": "resolve"
+      },
+      {
+        "rule_set": [
+          "GeoIP-Private",
+          "GeoIP-CN"
+        ],
+        "action": "route",
+        "outbound": "🎯 全球直连"
       }
     ],
     "rule_set": [
