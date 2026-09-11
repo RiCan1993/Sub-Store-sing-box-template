@@ -272,13 +272,6 @@
         "outbound": "🎯 全球直连"
       },
       {
-        "rule_set": [
-          "GFW"
-        ],
-        "action": "route",
-        "outbound": "🚀 节点选择"
-      },
-      {
         "domain_suffix": [
           "superfj.com"
         ],
@@ -316,6 +309,13 @@
         ],
         "action": "route",
         "outbound": "🎯 全球直连"
+      },
+      {
+        "rule_set": [
+          "GFW"
+        ],
+        "action": "route",
+        "outbound": "🚀 节点选择"
       }
     ],
     "rule_set": [
