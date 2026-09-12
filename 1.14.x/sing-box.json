@@ -172,8 +172,7 @@
       "tag": "🎯 全球直连",
       "interrupt_exist_connections": true,
       "outbounds": [
-        "direct",
-        "block"
+        "direct"
       ]
     },
     {
@@ -181,8 +180,7 @@
       "tag": "🛑 全球拦截",
       "interrupt_exist_connections": true,
       "outbounds": [
-        "block",
-        "direct"
+        "block"
       ]
     },
     {
@@ -202,6 +200,16 @@
     "find_process": true,
     "final": "🐟 漏网之鱼",
     "rules": [
+      {
+        "clash_mode": "Direct",
+        "action": "route",
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "clash_mode": "Global",
+        "action": "route",
+        "outbound": "🚀 节点选择"
+      },
       {
         "action": "sniff",
         "inbound": "tun-in"
