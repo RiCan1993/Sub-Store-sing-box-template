@@ -160,15 +160,6 @@
     },
     {
       "type": "selector",
-      "tag": "🤖 AI服务",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "🎈 自动选择",
-        "🎯 全球直连"
-      ]
-    },
-    {
-      "type": "selector",
       "tag": "🎯 全球直连",
       "interrupt_exist_connections": true,
       "outbounds": [
@@ -234,21 +225,6 @@
         "action": "route",
         "protocol": "quic",
         "outbound": "🛑 全球拦截"
-      },
-      {
-        "domain_suffix": [
-          "superfj.com"
-        ],
-        "action": "route",
-        "outbound": "🤖 AI服务"
-      },
-      {
-        "ip_cidr": [
-          "207.57.123.187/32",
-          "2001:df1:7880:6::c4/128"
-        ],
-        "action": "route",
-        "outbound": "🤖 AI服务"
       },
       {
         "rule_set": [
