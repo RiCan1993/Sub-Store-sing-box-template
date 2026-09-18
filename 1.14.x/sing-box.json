@@ -29,14 +29,6 @@
   "http_clients": [
     {
       "tag": "default",
-      "detour": "🚀 节点选择"
-    },
-        {
-      "tag": "🚀 节点选择",
-      "detour": "🚀 节点选择"
-    },
-    {
-      "tag": "🎯 全球直连",
       "detour": "🎯 全球直连"
     }
   ],
@@ -86,24 +78,12 @@
       {
         "query_type": "HTTPS",
         "action": "reject"
-      },
-      {
-        "domain_suffix": [
-          "lancache.steamcontent.com",
-          "10099.com.cn",
-          "msftconnecttest.com",
-          "msftncsi.com",
-          "local",
-          "lan",
-          "home",
-          "internal",
-          "corp",
-          "example.com"
-        ],
-        "server": "Local-DNS"
       }
     ],
-    "optimistic": true,
+    "optimistic": {
+      "enabled": true,
+      "timeout": "3d"
+    },
     "final": "Remote-DNS",
     "strategy": "prefer_ipv4"
   },
@@ -192,6 +172,10 @@
     "final": "🐟 漏网之鱼",
     "rules": [
       {
+        "action": "sniff",
+        "inbound": "tun-in"
+      },
+      {
         "clash_mode": "Direct",
         "action": "route",
         "outbound": "🎯 全球直连"
@@ -200,10 +184,6 @@
         "clash_mode": "Global",
         "action": "route",
         "outbound": "🚀 节点选择"
-      },
-      {
-        "action": "sniff",
-        "inbound": "tun-in"
       },
       {
         "rule_set": [
@@ -259,7 +239,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads.srs",
         "format": "binary",
-        "http_client": "🎯 全球直连",
+        "http_client": "default",
         "update_interval": "24h"
       },
       {
@@ -267,7 +247,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
         "format": "binary",
-        "http_client": "🎯 全球直连",
+        "http_client": "default",
         "update_interval": "24h"
       },
       {
@@ -275,7 +255,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple-cn.srs",
         "format": "binary",
-        "http_client": "🎯 全球直连",
+        "http_client": "default",
         "update_interval": "24h"
       },
       {
@@ -283,7 +263,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cn.srs",
         "format": "binary",
-        "http_client": "🎯 全球直连",
+        "http_client": "default",
         "update_interval": "24h"
       },
       {
@@ -291,7 +271,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
         "format": "binary",
-        "http_client": "🎯 全球直连",
+        "http_client": "default",
         "update_interval": "24h"
       },
       {
@@ -299,7 +279,7 @@
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/gfw.srs",
         "format": "binary",
-        "http_client": "🎯 全球直连",
+        "http_client": "default",
         "update_interval": "24h"
       }
     ]
