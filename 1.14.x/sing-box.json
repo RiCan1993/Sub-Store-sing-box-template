@@ -221,17 +221,17 @@
       },
       {
         "rule_set": [
-          "GFW"
-        ],
-        "action": "route",
-        "outbound": "🚀 节点选择"
-      },
-      {
-        "rule_set": [
           "GeoSite-AI"
         ],
         "action": "route",
         "outbound": "🤖 AI服务"
+      },
+      {
+        "rule_set": [
+          "GFW"
+        ],
+        "action": "route",
+        "outbound": "🚀 节点选择"
       },
       {
         "action": "resolve"
