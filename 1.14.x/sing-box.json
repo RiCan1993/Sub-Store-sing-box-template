@@ -317,6 +317,7 @@
   "experimental": {
     "cache_file": {
       "enabled": true,
+      "path": "cache.db",
       "store_dns": true
     }
   }
