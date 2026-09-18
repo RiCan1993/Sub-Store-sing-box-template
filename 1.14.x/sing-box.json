@@ -97,7 +97,6 @@
       "interface_name": "sing-box",
       "stack": "mixed",
       "auto_route": true,
-      "auto_detect_interface": true,
       "strict_route": true,
       "address": [
         "172.18.0.1/30",
