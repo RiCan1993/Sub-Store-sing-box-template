@@ -137,6 +137,14 @@
     },
     {
       "type": "selector",
+      "tag": "🤖 AI服务",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "🚀 节点选择"
+      ]
+    },
+    {
+      "type": "selector",
       "tag": "🎯 全球直连",
       "interrupt_exist_connections": true,
       "outbounds": [
@@ -158,14 +166,6 @@
       "outbounds": [
         "🚀 节点选择",
         "🎯 全球直连"
-      ]
-    },
-    {
-      "type": "selector",
-      "tag": "🤖 AI服务",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "🚀 节点选择"
       ]
     }
   ],
