@@ -159,6 +159,14 @@
         "🚀 节点选择",
         "🎯 全球直连"
       ]
+    },
+    {
+      "type": "selector",
+      "tag": "🤖 AI服务",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "🚀 节点选择"
+      ]
     }
   ],
   "route": {
@@ -219,6 +227,13 @@
         "outbound": "🚀 节点选择"
       },
       {
+        "rule_set": [
+          "GeoSite-AI"
+        ],
+        "action": "route",
+        "outbound": "🤖 AI服务"
+      },
+      {
         "action": "resolve"
       },
       {
@@ -275,6 +290,14 @@
         "tag": "GFW",
         "type": "remote",
         "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/gfw.srs",
+        "format": "binary",
+        "http_client": "default",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "GeoSite-AI",
+        "type": "remote",
+        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-!cn.srs",
         "format": "binary",
         "http_client": "default",
         "update_interval": "24h"
