@@ -14,7 +14,7 @@
       "dashboard": {
         "enabled": true,
         "path": "dashboard",
-        "download_url": "https://gh-proxy.com/https://github.com/SagerNet/sing-box-dashboard/archive/refs/heads/gh-pages.zip",
+        "download_url": "https://github.com/SagerNet/sing-box-dashboard/archive/refs/heads/gh-pages.zip",
         "http_client": "default",
         "update_interval": "1d"
       }
@@ -29,21 +29,34 @@
   "http_clients": [
     {
       "tag": "default",
-      "detour": "🎯 全球直连"
+      "detour": "🚀 节点选择"
     }
   ],
   "dns": {
     "servers": [
       {
         "tag": "Local-DNS",
-        "type": "udp",
-        "server": "223.5.5.5"
+        "type": "https",
+        "server": "223.5.5.5",
+        "server_port": 443,
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "dns.alidns.com"
+        }
       },
       {
         "tag": "Remote-DNS",
-        "type": "udp",
-        "detour": "🚀 节点选择",
-        "server": "8.8.8.8"
+        "type": "https",
+        "server": "8.8.8.8",
+        "server_port": 443,
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "dns.google"
+        },
+        "detour": "🚀 节点选择"
+
       }
     ],
     "rules": [
@@ -71,10 +84,6 @@
         ],
         "action": "route",
         "server": "Remote-DNS"
-      },
-      {
-        "query_type": "HTTPS",
-        "action": "reject"
       }
     ],
     "optimistic": {
@@ -95,14 +104,15 @@
       "tag": "tun-in",
       "type": "tun",
       "interface_name": "sing-box",
-      "stack": "mixed",
-      "auto_route": true,
-      "strict_route": true,
       "address": [
         "172.18.0.1/30",
         "fdfe:dcba:9876::1/126"
       ],
       "mtu": 1500,
+      "dns_mode": "hijack",
+      "auto_route": true,
+      "strict_route": true,
+      "stack": "mixed",
       "platform": {
         "http_proxy": {
           "enabled": true,
@@ -178,16 +188,7 @@
     }
   ],
   "route": {
-    "default_domain_resolver": "Local-DNS",
-    "default_http_client": "default",
-    "auto_detect_interface": true,
-    "find_process": true,
-    "final": "🐟 漏网之鱼",
     "rules": [
-      {
-        "action": "sniff",
-        "inbound": "tun-in"
-      },
       {
         "clash_mode": "Direct",
         "action": "route",
@@ -206,6 +207,9 @@
         "outbound": "🛑 全球拦截"
       },
       {
+        "action": "sniff"
+      }, 
+      {
         "action": "hijack-dns",
         "protocol": "dns"
       },
@@ -220,24 +224,27 @@
         "outbound": "🛑 全球拦截"
       },
       {
-        "rule_set": [
-          "GeoSite-CN",
-          "GeoSite-Apple-CN"
-        ],
+        "rule_set": "GeoIP-Private",
         "action": "route",
         "outbound": "🎯 全球直连"
       },
       {
-        "rule_set": [
-          "GeoSite-AI"
-        ],
+        "rule_set": "GeoSite-CN",
+        "action": "route",
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "rule_set": "GeoSite-Apple-CN",
+        "action": "route",
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "rule_set": "GeoSite-AI",
         "action": "route",
         "outbound": "🤖 AI服务"
       },
       {
-        "rule_set": [
-          "GFW"
-        ],
+        "rule_set": "GFW",
         "action": "route",
         "outbound": "🚀 节点选择"
       },
@@ -245,70 +252,71 @@
         "action": "resolve"
       },
       {
-        "rule_set": [
-          "GeoIP-Private",
-          "GeoIP-CN"
-        ],
+        "rule_set": "GeoIP-CN",
         "action": "route",
         "outbound": "🎯 全球直连"
       }
     ],
+    "final": "🐟 漏网之鱼",
+    "auto_detect_interface": true,
+    "default_http_client": "default",
+    "default_domain_resolver": "Local-DNS",
     "rule_set": [
       {
         "tag": "GeoSite-Ads",
         "type": "remote",
-        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads.srs",
         "format": "binary",
         "http_client": "default",
-        "update_interval": "24h"
+        "update_interval": "1d"
       },
       {
         "tag": "GeoSite-CN",
         "type": "remote",
-        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
         "format": "binary",
         "http_client": "default",
-        "update_interval": "24h"
+        "update_interval": "1d"
       },
       {
         "tag": "GeoSite-Apple-CN",
         "type": "remote",
-        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple-cn.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple-cn.srs",
         "format": "binary",
         "http_client": "default",
-        "update_interval": "24h"
+        "update_interval": "1d"
       },
       {
         "tag": "GeoIP-CN",
         "type": "remote",
-        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cn.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cn.srs",
         "format": "binary",
         "http_client": "default",
-        "update_interval": "24h"
+        "update_interval": "1d"
       },
       {
         "tag": "GeoIP-Private",
         "type": "remote",
-        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
         "format": "binary",
         "http_client": "default",
-        "update_interval": "24h"
+        "update_interval": "1d"
       },
       {
         "tag": "GFW",
         "type": "remote",
-        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/gfw.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/gfw.srs",
         "format": "binary",
         "http_client": "default",
-        "update_interval": "24h"
+        "update_interval": "1d"
       },
       {
         "tag": "GeoSite-AI",
         "type": "remote",
-        "url": "https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-!cn.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-!cn.srs",
         "format": "binary",
         "http_client": "default",
-        "update_interval": "24h"
+        "update_interval": "1d"
       }
     ]
   }
