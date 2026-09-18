@@ -97,7 +97,8 @@
       "interface_name": "sing-box",
       "stack": "mixed",
       "auto_route": true,
-      "strict_route": false,
+      "auto_detect_interface": true,
+      "strict_route": true,
       "address": [
         "172.18.0.1/30",
         "fdfe:dcba:9876::1/126"
