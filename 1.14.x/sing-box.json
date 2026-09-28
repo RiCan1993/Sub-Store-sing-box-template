@@ -101,7 +101,7 @@
       "dns_mode": "hijack",
       "auto_route": true,
       "strict_route": true,
-      "stack": "system",
+      "stack": "mixed",
       "platform": {
         "http_proxy": {
           "enabled": true,
@@ -213,11 +213,6 @@
       },
       {
         "rule_set": "GeoSite-CN",
-        "action": "route",
-        "outbound": "🎯 全球直连"
-      },
-      {
-        "rule_set": "GeoIP-CN",
         "action": "route",
         "outbound": "🎯 全球直连"
       },
