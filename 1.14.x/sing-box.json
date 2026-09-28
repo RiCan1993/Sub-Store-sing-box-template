@@ -104,7 +104,7 @@
       "dns_mode": "hijack",
       "auto_route": true,
       "strict_route": true,
-      "stack": "mixed",
+      "stack": "system",
       "platform": {
         "http_proxy": {
           "enabled": true,
@@ -208,11 +208,6 @@
         "action": "route",
         "network": "icmp",
         "outbound": "🎯 全球直连"
-      },
-      {
-        "action": "route",
-        "protocol": "quic",
-        "outbound": "🛑 全球拦截"
       },
       {
         "rule_set": "GeoIP-Private",
