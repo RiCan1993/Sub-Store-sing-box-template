@@ -29,7 +29,12 @@
           "server_name": "dns.google"
         },
         "detour": "🚀 节点选择"
-
+      },
+      {
+        "tag": "FakeIP",
+        "type": "fakeip",
+        "inet4_range": "198.18.0.0/15",
+        "inet6_range": "fc00::/18"
       }
     ],
     "rules": [
@@ -57,6 +62,14 @@
         ],
         "action": "route",
         "server": "Remote-DNS"
+      },
+      {
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "action": "route",
+        "server": "FakeIP"
       }
     ],
     "optimistic": {
@@ -213,6 +226,11 @@
         "outbound": "🎯 全球直连"
       },
       {
+        "rule_set": "GeoIP-CN",
+        "action": "route",
+        "outbound": "🎯 全球直连"
+      },
+      {
         "rule_set": "GeoSite-Apple-CN",
         "action": "route",
         "outbound": "🎯 全球直连"
@@ -226,14 +244,6 @@
         "rule_set": "GFW",
         "action": "route",
         "outbound": "🚀 节点选择"
-      },
-      {
-        "action": "resolve"
-      },
-      {
-        "rule_set": "GeoIP-CN",
-        "action": "route",
-        "outbound": "🎯 全球直连"
       }
     ],
     "final": "🐟 漏网之鱼",
@@ -318,7 +328,8 @@
     "cache_file": {
       "enabled": true,
       "path": "cache.db",
-      "store_dns": true
+      "store_dns": true,
+      "store_fakeip": true
     }
   }
 }
