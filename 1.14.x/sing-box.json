@@ -76,7 +76,7 @@
       "enabled": true,
       "timeout": "3d"
     },
-    "final": "Remote-DNS",
+    "final": "Local-DNS",
     "strategy": "prefer_ipv4"
   },
   "http_clients": [
