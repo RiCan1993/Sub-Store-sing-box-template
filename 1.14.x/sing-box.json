@@ -112,7 +112,8 @@
       "route_exclude_address": [
         "10.0.0.0/8",
         "172.16.0.0/12",
-        "192.168.0.0/16"
+        "192.168.0.0/16",
+        "113.18.255.0/24"
       ]
     }
   ],
@@ -307,7 +308,7 @@
     {
       "type": "api",
       "listen": "::",
-      "listen_port": 9999,
+      "listen_port": 9090,
       "secret": "singbox",
       "dashboard": {
         "enabled": true,
