@@ -57,7 +57,10 @@
         "server": "Local-DNS"
       },
       {
-        "query_type": "HTTPS",
+        "query_type": [
+          "HTTPS",
+          "SVCB"
+        ],
         "action": "reject"
       },
       {
