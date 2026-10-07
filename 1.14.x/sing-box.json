@@ -73,7 +73,7 @@
       "enabled": true,
       "timeout": "3d"
     },
-    "final": "Local-DNS",
+    "final": "Remote-DNS",
     "strategy": "prefer_ipv4"
   },
   "http_clients": [
@@ -86,7 +86,7 @@
     {
       "tag": "mixed-in",
       "type": "mixed",
-      "listen": "0.0.0.0",
+      "listen": "127.0.0.1",
       "listen_port": 5555
     },
     {
@@ -191,6 +191,11 @@
         "outbound": "🚀 节点选择"
       },
       {
+        "rule_set": "GeoIP-Private",
+        "action": "route",
+        "outbound": "🎯 全球直连"
+      },
+      {
         "action": "sniff"
       }, 
       {
@@ -198,21 +203,16 @@
         "protocol": "dns"
       },
       {
-        "rule_set": [
-          "GeoSite-Ads"
-        ],
-        "action": "route",
-        "outbound": "🛑 全球拦截"
-      },
-      {
         "action": "route",
         "network": "icmp",
         "outbound": "🎯 全球直连"
       },
       {
-        "rule_set": "GeoIP-Private",
+        "rule_set": [
+          "GeoSite-Ads"
+        ],
         "action": "route",
-        "outbound": "🎯 全球直连"
+        "outbound": "🛑 全球拦截"
       },
       {
         "rule_set": "GeoSite-CN",
@@ -246,7 +246,7 @@
     "final": "🐟 漏网之鱼",
     "auto_detect_interface": true,
     "default_http_client": "default",
-    "default_domain_resolver": "Local-DNS",
+    "default_domain_resolver": "Remote-DNS",
     "rule_set": [
       {
         "tag": "GeoSite-Ads",
