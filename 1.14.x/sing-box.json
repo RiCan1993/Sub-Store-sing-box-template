@@ -8,7 +8,7 @@
   "dns": {
     "servers": [
       {
-        "tag": "ali-doh",
+        "tag": "ali-DoH",
         "type": "https",
         "server": "223.5.5.5",
         "server_port": 443,
@@ -19,7 +19,7 @@
         }
       },
       {
-        "tag": "google-doh",
+        "tag": "Google-DoH",
         "type": "https",
         "server": "8.8.8.8",
         "server_port": 443,
@@ -41,7 +41,7 @@
       {
         "clash_mode": "Direct",
         "action": "route",
-        "server": "ali-doh"
+        "server": "ali-DoH"
       },
       {
         "clash_mode": "Global",
@@ -54,7 +54,15 @@
           "GeoSite-CN"
         ],
         "action": "route",
-        "server": "ali-doh"
+        "server": "ali-DoH"
+      },
+      {
+        "rule_set": [
+          "GeoSite-AI",
+          "GFW"
+        ],
+        "action": "route",
+        "server": "Google-DoH"
       },
       {
         "query_type": [
@@ -72,11 +80,8 @@
         "server": "FakeIP"
       }
     ],
-    "optimistic": {
-      "enabled": true,
-      "timeout": "3d"
-    },
-    "final": "google-doh",
+    "optimistic": true,
+    "final": "ali-DoH",
     "strategy": "prefer_ipv4"
   },
   "http_clients": [
@@ -101,7 +106,6 @@
         "fdfe:dcba:9876::1/126"
       ],
       "mtu": 1500,
-      "dns_mode": "hijack",
       "auto_route": true,
       "strict_route": false,
       "stack": "mixed",
@@ -112,12 +116,8 @@
           "server_port": 5555
         }
       },
-      "route_exclude_address": [
-        "10.0.0.0/8",
-        "172.16.0.0/12",
-        "192.168.0.0/16"
-      ],
       "route_exclude_address_set": [
+        "GeoIP-Private",
         "GeoIP-CN"
       ]
     }
@@ -228,6 +228,11 @@
         "outbound": "🎯 全球直连"
       },
       {
+        "rule_set": "GeoIP-CN",
+        "action": "route",
+        "outbound": "🎯 全球直连"
+      },
+      {
         "rule_set": "GeoSite-AI",
         "action": "route",
         "outbound": "🤖 AI服务"
@@ -236,20 +241,12 @@
         "rule_set": "GFW",
         "action": "route",
         "outbound": "🚀 节点选择"
-      },
-      {
-        "action": "resolve"
-      },
-      {
-        "rule_set": "GeoIP-CN",
-        "action": "route",
-        "outbound": "🎯 全球直连"
       }
     ],
     "final": "🐟 漏网之鱼",
     "auto_detect_interface": true,
     "default_http_client": "default",
-    "default_domain_resolver": "google-doh",
+    "default_domain_resolver": "ali-DoH",
     "rule_set": [
       {
         "tag": "GeoSite-Ads",
