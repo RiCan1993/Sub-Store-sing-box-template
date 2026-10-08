@@ -8,7 +8,7 @@
   "dns": {
     "servers": [
       {
-        "tag": "Local-DNS",
+        "tag": "ali-doh",
         "type": "https",
         "server": "223.5.5.5",
         "server_port": 443,
@@ -19,7 +19,7 @@
         }
       },
       {
-        "tag": "Remote-DNS",
+        "tag": "google-doh",
         "type": "https",
         "server": "8.8.8.8",
         "server_port": 443,
@@ -41,7 +41,7 @@
       {
         "clash_mode": "Direct",
         "action": "route",
-        "server": "Local-DNS"
+        "server": "ali-doh"
       },
       {
         "clash_mode": "Global",
@@ -54,7 +54,7 @@
           "GeoSite-CN"
         ],
         "action": "route",
-        "server": "Local-DNS"
+        "server": "ali-doh"
       },
       {
         "query_type": [
@@ -76,7 +76,7 @@
       "enabled": true,
       "timeout": "3d"
     },
-    "final": "Remote-DNS",
+    "final": "google-doh",
     "strategy": "prefer_ipv4"
   },
   "http_clients": [
@@ -103,7 +103,7 @@
       "mtu": 1500,
       "dns_mode": "hijack",
       "auto_route": true,
-      "strict_route": true,
+      "strict_route": false,
       "stack": "mixed",
       "platform": {
         "http_proxy": {
@@ -249,7 +249,7 @@
     "final": "🐟 漏网之鱼",
     "auto_detect_interface": true,
     "default_http_client": "default",
-    "default_domain_resolver": "Remote-DNS",
+    "default_domain_resolver": "google-doh",
     "rule_set": [
       {
         "tag": "GeoSite-Ads",
