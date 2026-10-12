@@ -59,7 +59,8 @@
       {
         "rule_set": [
           "GeoSite-AI",
-          "GFW"
+          "GFW",
+          "GeoSite-Apple"
         ],
         "action": "route",
         "server": "Google-DoH"
@@ -157,6 +158,14 @@
     },
     {
       "type": "selector",
+      "tag": " 苹果服务",
+      "interrupt_exist_connections": true,
+      "outbounds": [
+        "🚀 节点选择"
+      ]
+    },
+    {
+      "type": "selector",
       "tag": "🎯 全球直连",
       "interrupt_exist_connections": true,
       "outbounds": [
@@ -233,6 +242,11 @@
         "outbound": "🎯 全球直连"
       },
       {
+        "rule_set": "GeoSite-Apple",
+        "action": "route",
+        "outbound": " 苹果服务"
+      },
+      {
         "rule_set": "GeoSite-AI",
         "action": "route",
         "outbound": "🤖 AI服务"
@@ -268,6 +282,14 @@
         "tag": "GeoSite-Apple-CN",
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple-cn.srs",
+        "format": "binary",
+        "http_client": "default",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "GeoSite-Apple",
+        "type": "remote",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple.srs",
         "format": "binary",
         "http_client": "default",
         "update_interval": "1d"

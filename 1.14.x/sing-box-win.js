@@ -29,6 +29,9 @@ config.outbounds.forEach(outbound => {
   if (outbound.type === 'selector' && outbound.tag === '🤖 AI服务') {
     outbound.outbounds.push(...proxyTags)
   }
+  if (outbound.type === 'selector' && outbound.tag === ' 苹果服务') {
+    outbound.outbounds.push(...proxyTags)
+  }
 })
 
 // Fill empty outbounds with COMPATIBLE fallback
