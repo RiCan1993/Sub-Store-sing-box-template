@@ -18,18 +18,16 @@ config.outbounds.push(...proxies)
 
 const proxyTags = proxies.map(p => p.tag)
 
-// Push proxy tags to main selector and auto urltest
+// Add proxy tags to these selector and urltest groups. Add new group names here.
+const proxyGroupTags = [
+  '🚀 节点选择',
+  '🎈 自动选择',
+  '🤖 AI服务',
+  '🍎 苹果服务',
+]
+
 config.outbounds.forEach(outbound => {
-  if (outbound.type === 'selector' && outbound.tag === '🚀 节点选择') {
-    outbound.outbounds.push(...proxyTags)
-  }
-  if (outbound.type === 'urltest' && outbound.tag === '🎈 自动选择') {
-    outbound.outbounds.push(...proxyTags)
-  }
-  if (outbound.type === 'selector' && outbound.tag === '🤖 AI服务') {
-    outbound.outbounds.push(...proxyTags)
-  }
-  if (outbound.type === 'selector' && outbound.tag === '🍎 苹果服务') {
+  if (['selector', 'urltest'].includes(outbound.type) && proxyGroupTags.includes(outbound.tag)) {
     outbound.outbounds.push(...proxyTags)
   }
 })
