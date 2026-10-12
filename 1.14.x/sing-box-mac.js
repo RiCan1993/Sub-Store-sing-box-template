@@ -28,7 +28,7 @@ config.outbounds.forEach(outbound => {
   if (outbound.type === 'selector' && outbound.tag === '🤖 AI服务') {
     outbound.outbounds.push(...proxyTags)
   }
-  if (outbound.type === 'selector' && outbound.tag === ' 苹果服务') {
+  if (outbound.type === 'selector' && outbound.tag === '🍎 苹果服务') {
     outbound.outbounds.push(...proxyTags)
   }
 })
