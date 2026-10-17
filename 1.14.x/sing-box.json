@@ -46,21 +46,29 @@
       {
         "clash_mode": "Global",
         "action": "route",
-        "server": "FakeIP"
+        "server": "Google-DoH"
+      },
+      {
+        "rule_set":[
+          "GeoSite-Ads-All"
+        ],
+        "action": "reject"
       },
       {
         "rule_set": [
           "GeoSite-Apple-CN",
-          "GeoSite-CN"
+          "GeoSite-CN",
+          "GeoSite-Geolocation-CN"
         ],
         "action": "route",
         "server": "ali-DoH"
       },
       {
         "rule_set": [
-          "GeoSite-AI",
-          "GFW",
-          "GeoSite-Apple"
+          "GeoSite-AI-!CN",
+          "GeoSite-Apple",
+          "GeoSite-GFW",
+          "GeoSite-Geolocation-!CN"
         ],
         "action": "route",
         "server": "Google-DoH"
@@ -106,10 +114,9 @@
         "172.18.0.1/30",
         "fdfe:dcba:9876::1/126"
       ],
-      "mtu": 0,
+      "mtu": 1500,
       "auto_route": true,
       "strict_route": false,
-      "stack": "mixed",
       "platform": {
         "http_proxy": {
           "enabled": true,
@@ -142,7 +149,7 @@
     },
     {
       "type": "selector",
-      "tag": "🤖 AI服务",
+      "tag": "🧠 AI服务",
       "interrupt_exist_connections": true,
       "outbounds": [
         "🚀 节点选择"
@@ -221,15 +228,10 @@
       },
       {
         "rule_set": [
-          "GeoSite-Ads"
+          "GeoSite-Ads-All"
         ],
         "action": "route",
         "outbound": "🛑 全球拦截"
-      },
-      {
-        "rule_set": "GeoSite-CN",
-        "action": "route",
-        "outbound": "🎯 全球直连"
       },
       {
         "rule_set": "GeoSite-Apple-CN",
@@ -237,7 +239,12 @@
         "outbound": "🎯 全球直连"
       },
       {
-        "rule_set": "GeoIP-CN",
+        "rule_set": "GeoSite-CN",
+        "action": "route",
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "rule_set": "GeoSite-Geolocation-CN",
         "action": "route",
         "outbound": "🎯 全球直连"
       },
@@ -247,14 +254,27 @@
         "outbound": "🍎 苹果服务"
       },
       {
-        "rule_set": "GeoSite-AI",
+        "rule_set": "GeoSite-AI-!CN",
         "action": "route",
-        "outbound": "🤖 AI服务"
+        "outbound": "🧠 AI服务"
       },
       {
-        "rule_set": "GFW",
+        "rule_set": "GeoSite-GFW",
         "action": "route",
         "outbound": "🚀 节点选择"
+      },
+      {
+        "rule_set": "GeoSite-Geolocation-!CN",
+        "action": "route",
+        "outbound": "🚀 节点选择"
+      },
+      {
+        "action": "resolve"
+      },
+      {
+        "rule_set": "GeoIP-CN",
+        "action": "route",
+        "outbound": "🎯 全球直连"
       }
     ],
     "final": "🐟 漏网之鱼",
@@ -263,9 +283,9 @@
     "default_domain_resolver": "ali-DoH",
     "rule_set": [
       {
-        "tag": "GeoSite-Ads",
+        "tag": "GeoSite-Ads-All",
         "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads-all.srs",
         "format": "binary",
         "http_client": "default",
         "update_interval": "1d"
@@ -311,7 +331,7 @@
         "update_interval": "1d"
       },
       {
-        "tag": "GFW",
+        "tag": "GeoSite-GFW",
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/gfw.srs",
         "format": "binary",
@@ -319,9 +339,25 @@
         "update_interval": "1d"
       },
       {
-        "tag": "GeoSite-AI",
+        "tag": "GeoSite-AI-!CN",
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-!cn.srs",
+        "format": "binary",
+        "http_client": "default",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "GeoSite-Geolocation-CN",
+        "type": "remote",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-cn.srs",
+        "format": "binary",
+        "http_client": "default",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "GeoSite-Geolocation-!CN",
+        "type": "remote",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-!cn.srs",
         "format": "binary",
         "http_client": "default",
         "update_interval": "1d"
