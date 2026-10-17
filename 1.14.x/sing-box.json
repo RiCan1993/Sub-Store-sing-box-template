@@ -1,33 +1,27 @@
 {
   "log": {
-    "disabled": false,
-    "level": "info",
-    "output": "",
-    "timestamp": false
+    "level": "info"
   },
   "dns": {
     "servers": [
       {
-        "tag": "ali-DoH",
-        "type": "https",
+        "tag": "Alibab-DNS",
+        "type": "udp",
         "server": "223.5.5.5",
-        "server_port": 443,
-        "path": "/dns-query",
-        "tls": {
-          "enabled": true,
-          "server_name": "dns.alidns.com"
-        }
+        "server_port": 53,
+        "detour": "🎯 全球直连"
       },
       {
         "tag": "Google-DoH",
         "type": "https",
-        "server": "8.8.8.8",
+        "server": "dns.google",
         "server_port": 443,
         "path": "/dns-query",
         "tls": {
           "enabled": true,
           "server_name": "dns.google"
         },
+        "domain_resolver": "Alibab-DNS",
         "detour": "🚀 节点选择"
       },
       {
@@ -38,16 +32,6 @@
       }
     ],
     "rules": [
-      {
-        "clash_mode": "Direct",
-        "action": "route",
-        "server": "ali-DoH"
-      },
-      {
-        "clash_mode": "Global",
-        "action": "route",
-        "server": "Google-DoH"
-      },
       {
         "rule_set":[
           "GeoSite-Ads-All"
@@ -61,7 +45,14 @@
           "GeoSite-Geolocation-CN"
         ],
         "action": "route",
-        "server": "ali-DoH"
+        "server": "Alibab-DNS"
+      },
+      {
+        "query_type": [
+          "HTTPS",
+          "SVCB"
+        ],
+        "action": "reject"
       },
       {
         "rule_set": [
@@ -71,14 +62,7 @@
           "GeoSite-Geolocation-!CN"
         ],
         "action": "route",
-        "server": "Google-DoH"
-      },
-      {
-        "query_type": [
-          "HTTPS",
-          "SVCB"
-        ],
-        "action": "reject"
+        "server": "FakeIP"
       },
       {
         "query_type": [
@@ -90,7 +74,7 @@
       }
     ],
     "optimistic": true,
-    "final": "ali-DoH",
+    "final": "Alibab-DNS",
     "strategy": "prefer_ipv4"
   },
   "http_clients": [
@@ -207,16 +191,6 @@
         "protocol": "dns"
       },
       {
-        "clash_mode": "Direct",
-        "action": "route",
-        "outbound": "🎯 全球直连"
-      },
-      {
-        "clash_mode": "Global",
-        "action": "route",
-        "outbound": "🚀 节点选择"
-      },
-      {
         "rule_set": "GeoIP-Private",
         "action": "route",
         "outbound": "🎯 全球直连"
@@ -280,7 +254,7 @@
     "final": "🐟 漏网之鱼",
     "auto_detect_interface": true,
     "default_http_client": "default",
-    "default_domain_resolver": "ali-DoH",
+    "default_domain_resolver": "Alibab-DNS",
     "rule_set": [
       {
         "tag": "GeoSite-Ads-All",
