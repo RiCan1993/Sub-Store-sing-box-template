@@ -5,30 +5,44 @@
   "dns": {
     "servers": [
       {
-        "tag": "Alibab-DNS",
-        "type": "udp",
-        "server": "223.5.5.5",
-        "server_port": 53,
-        "detour": "🎯 全球直连"
+        "tag": "hosts_fix",
+        "type": "hosts",
+        "predefined": {
+          "dns.alidns.com": [
+            "223.5.5.5",
+            "223.6.6.6"
+          ],
+          "dns.google": [
+            "8.8.8.8",
+            "8.8.4.4"
+          ]
+        }
+      },
+      {
+        "tag": "Alibab-DoH",
+        "type": "https",
+        "server": "dns.alidns.com",
+        "domain_resolver": "hosts_fix"
       },
       {
         "tag": "Google-DoH",
         "type": "https",
         "server": "dns.google",
-        "server_port": 443,
-        "path": "/dns-query",
-        "tls": {
-          "enabled": true,
-          "server_name": "dns.google"
-        },
-        "domain_resolver": "Alibab-DNS",
-        "detour": "🚀 节点选择"
+        "domain_resolver": "hosts_fix"
       },
       {
         "tag": "FakeIP",
         "type": "fakeip",
         "inet4_range": "198.18.0.0/15",
         "inet6_range": "fc00::/18"
+      },
+      {
+        "tag": "local",
+        "type": "local",
+        "neighbor_domain": [
+          ".local",
+          ".lan"
+        ]
       }
     ],
     "rules": [
@@ -39,13 +53,32 @@
         "action": "reject"
       },
       {
+        "domain_suffix": [
+          "lancache.steamcontent.com",
+          "10099.com.cn",
+          "msftconnecttest.com",
+          "msftncsi.com",
+          "local",
+          "lan",
+          "home",
+          "internal",
+          "corp",
+          "example.com"
+        ],
+        "server": "local"
+      },
+      {
         "rule_set": [
           "GeoSite-Apple-CN",
           "GeoSite-CN",
           "GeoSite-Geolocation-CN"
         ],
-        "action": "route",
-        "server": "Alibab-DNS"
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "server": "Alibab-DoH",
+        "timeout": "3s"
       },
       {
         "query_type": [
@@ -53,16 +86,6 @@
           "SVCB"
         ],
         "action": "reject"
-      },
-      {
-        "rule_set": [
-          "GeoSite-AI-!CN",
-          "GeoSite-Apple",
-          "GeoSite-GFW",
-          "GeoSite-Geolocation-!CN"
-        ],
-        "action": "route",
-        "server": "FakeIP"
       },
       {
         "query_type": [
@@ -73,8 +96,9 @@
         "server": "FakeIP"
       }
     ],
+    "reverse_mapping": true,
     "optimistic": true,
-    "final": "Alibab-DNS",
+    "final": "Alibab-DoH",
     "strategy": "prefer_ipv4"
   },
   "http_clients": [
@@ -85,12 +109,6 @@
   ],
   "inbounds": [
     {
-      "tag": "mixed-in",
-      "type": "mixed",
-      "listen": "127.0.0.1",
-      "listen_port": 5555
-    },
-    {
       "tag": "tun-in",
       "type": "tun",
       "interface_name": "sing-box",
@@ -98,6 +116,7 @@
         "172.18.0.1/30",
         "fdfe:dcba:9876::1/126"
       ],
+      "mtu": 1500,
       "auto_route": true,
       "strict_route": false,
       "stack": "mixed",
@@ -105,13 +124,19 @@
         "http_proxy": {
           "enabled": true,
           "server": "127.0.0.1",
-          "server_port": 5555
+          "server_port": 7890
         }
       },
       "route_exclude_address_set": [
         "GeoIP-Private",
         "GeoIP-CN"
       ]
+    },
+    {
+      "tag": "mixed-in",
+      "type": "mixed",
+      "listen": "127.0.0.1",
+      "listen_port": 7890
     }
   ],
   "outbounds": [
@@ -254,7 +279,7 @@
     "final": "🐟 漏网之鱼",
     "auto_detect_interface": true,
     "default_http_client": "default",
-    "default_domain_resolver": "Alibab-DNS",
+    "default_domain_resolver": "Alibab-DoH",
     "rule_set": [
       {
         "tag": "GeoSite-Ads-All",
