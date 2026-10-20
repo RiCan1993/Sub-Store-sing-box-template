@@ -5,44 +5,28 @@
   "dns": {
     "servers": [
       {
-        "tag": "hosts_fix",
-        "type": "hosts",
-        "predefined": {
-          "dns.alidns.com": [
-            "223.5.5.5",
-            "223.6.6.6"
-          ],
-          "dns.google": [
-            "8.8.8.8",
-            "8.8.4.4"
-          ]
-        }
+        "tag": "Alibab-UDP",
+        "type": "udp",
+        "server": "223.5.5.5"
       },
       {
         "tag": "Alibab-DoH",
         "type": "https",
         "server": "dns.alidns.com",
-        "domain_resolver": "hosts_fix"
+        "domain_resolver": "Alibab-UDP"
       },
       {
         "tag": "Google-DoH",
         "type": "https",
         "server": "dns.google",
-        "domain_resolver": "hosts_fix"
+        "domain_resolver": "Alibab-UDP",
+        "detour": "🚀 节点选择"
       },
       {
         "tag": "FakeIP",
         "type": "fakeip",
         "inet4_range": "198.18.0.0/15",
         "inet6_range": "fc00::/18"
-      },
-      {
-        "tag": "local",
-        "type": "local",
-        "neighbor_domain": [
-          ".local",
-          ".lan"
-        ]
       }
     ],
     "rules": [
@@ -53,53 +37,60 @@
         "action": "reject"
       },
       {
-        "domain_suffix": [
-          "lancache.steamcontent.com",
-          "10099.com.cn",
-          "msftconnecttest.com",
-          "msftncsi.com",
-          "local",
-          "lan",
-          "home",
-          "internal",
-          "corp",
-          "example.com"
-        ],
-        "server": "local"
-      },
-      {
         "rule_set": [
-          "GeoSite-Apple-CN",
+          "GeoSite-Apple",
           "GeoSite-CN",
           "GeoSite-Geolocation-CN"
         ],
         "query_type": [
           "A",
-          "AAAA"
+          "AAAA",
+          "CNAME"
         ],
-        "server": "Alibab-DoH",
-        "timeout": "3s"
+        "server": "Alibab-DoH"
       },
       {
-        "query_type": [
-          "HTTPS",
-          "SVCB"
+       "rule_set": [
+          "GeoSite-AI-!CN",
+          "GeoSite-GFW",
+          "GeoSite-Geolocation-!CN"
         ],
-        "action": "reject"
-      },
-      {
         "query_type": [
           "A",
           "AAAA"
         ],
         "action": "route",
         "server": "FakeIP"
+      },
+      {
+        "query_type": [
+          "A",
+          "AAAA",
+          "CNAME"
+        ],
+        "server": "Google-DoH"
+      },
+      {
+        "query_type": [
+          "A",
+          "AAAA",
+          "CNAME"
+        ],
+        "invert": true,
+        "action": "predefined",
+        "rcode": "REFUSED"
       }
     ],
     "reverse_mapping": true,
     "optimistic": true,
     "final": "Alibab-DoH",
     "strategy": "prefer_ipv4"
+  },
+  "ntp": {
+    "enabled": true,
+    "server": "time.apple.com",
+    "server_port": 123,
+    "interval": "30m"
   },
   "http_clients": [
     {
@@ -231,11 +222,7 @@
         "action": "route",
         "outbound": "🛑 全球拦截"
       },
-      {
-        "rule_set": "GeoSite-Apple-CN",
-        "action": "route",
-        "outbound": "🎯 全球直连"
-      },
+
       {
         "rule_set": "GeoSite-CN",
         "action": "route",
@@ -243,6 +230,11 @@
       },
       {
         "rule_set": "GeoSite-Geolocation-CN",
+        "action": "route",
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "rule_set": "GeoIP-CN",
         "action": "route",
         "outbound": "🎯 全球直连"
       },
@@ -265,14 +257,6 @@
         "rule_set": "GeoSite-Geolocation-!CN",
         "action": "route",
         "outbound": "🚀 节点选择"
-      },
-      {
-        "action": "resolve"
-      },
-      {
-        "rule_set": "GeoIP-CN",
-        "action": "route",
-        "outbound": "🎯 全球直连"
       }
     ],
     "final": "🐟 漏网之鱼",
@@ -292,14 +276,6 @@
         "tag": "GeoSite-CN",
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
-        "format": "binary",
-        "http_client": "default",
-        "update_interval": "1d"
-      },
-      {
-        "tag": "GeoSite-Apple-CN",
-        "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple-cn.srs",
         "format": "binary",
         "http_client": "default",
         "update_interval": "1d"
@@ -380,7 +356,6 @@
   "experimental": {
     "cache_file": {
       "enabled": true,
-      "path": "cache.db",
       "store_dns": true,
       "store_fakeip": true
     }
