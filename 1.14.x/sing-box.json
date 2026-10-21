@@ -5,21 +5,33 @@
   "dns": {
     "servers": [
       {
-        "tag": "Alibab-UDP",
+        "tag": "Alibab-DNS",
         "type": "udp",
-        "server": "223.5.5.5"
+        "server": "223.5.5.5",
+        "server_port": 53
+      },
+      {
+        "tag": "Google-DNS",
+        "type": "udp",
+        "detour": "🚀 节点选择",
+        "server": "8.8.8.8",
+        "server_port": 53
       },
       {
         "tag": "Alibab-DoH",
         "type": "https",
+        "server_port": 443,
         "server": "dns.alidns.com",
-        "domain_resolver": "Alibab-UDP"
+        "path": "/dns-query",
+        "domain_resolver": "Alibab-DNS"
       },
       {
         "tag": "Google-DoH",
         "type": "https",
+        "server_port": 443,
         "server": "dns.google",
-        "domain_resolver": "Alibab-UDP",
+        "path": "/dns-query",
+        "domain_resolver": "Alibab-DNS",
         "detour": "🚀 节点选择"
       },
       {
@@ -31,21 +43,20 @@
     ],
     "rules": [
       {
-        "rule_set":[
-          "GeoSite-Ads-All"
-        ],
-        "action": "reject"
+        "action": "route",
+        "clash_mode": "Direct",
+        "server": "Alibab-DNS"
+      },
+      {
+        "action": "route",
+        "clash_mode": "Global",
+        "server": "Google-DNS"
       },
       {
         "rule_set": [
           "GeoSite-Apple",
           "GeoSite-CN",
           "GeoSite-Geolocation-CN"
-        ],
-        "query_type": [
-          "A",
-          "AAAA",
-          "CNAME"
         ],
         "server": "Alibab-DoH"
       },
@@ -55,36 +66,12 @@
           "GeoSite-GFW",
           "GeoSite-Geolocation-!CN"
         ],
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
         "action": "route",
-        "server": "FakeIP"
-      },
-      {
-        "query_type": [
-          "A",
-          "AAAA",
-          "CNAME"
-        ],
         "server": "Google-DoH"
-      },
-      {
-        "query_type": [
-          "A",
-          "AAAA",
-          "CNAME"
-        ],
-        "invert": true,
-        "action": "predefined",
-        "rcode": "REFUSED"
       }
     ],
-    "reverse_mapping": true,
     "optimistic": true,
-    "final": "Alibab-DoH",
-    "strategy": "prefer_ipv4"
+    "final": "Alibab-DoH"
   },
   "ntp": {
     "enabled": true,
@@ -94,7 +81,7 @@
   },
   "http_clients": [
     {
-      "tag": "default",
+      "tag": "🚀 节点选择",
       "detour": "🚀 节点选择"
     }
   ],
@@ -126,18 +113,13 @@
       "tag": "mixed-in",
       "type": "mixed",
       "listen": "127.0.0.1",
-      "listen_port": 7890
+      "listen_port": 7890,
+      "tcp_fast_open": false,
+      "tcp_multi_path": false,
+      "udp_fragment": false
     }
   ],
   "outbounds": [
-    {
-      "type": "direct",
-      "tag": "direct"
-    },
-    {
-      "type": "block",
-      "tag": "block"
-    },
     {
       "type": "selector",
       "tag": "🚀 节点选择",
@@ -151,7 +133,8 @@
       "tag": "🧠 AI服务",
       "interrupt_exist_connections": true,
       "outbounds": [
-        "🚀 节点选择"
+        "🚀 节点选择",
+        "🎯 全球直连"
       ]
     },
     {
@@ -159,7 +142,8 @@
       "tag": "🍎 苹果服务",
       "interrupt_exist_connections": true,
       "outbounds": [
-        "🚀 节点选择"
+        "🚀 节点选择",
+        "🎯 全球直连"
       ]
     },
     {
@@ -172,28 +156,20 @@
     },
     {
       "type": "selector",
-      "tag": "🎯 全球直连",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "direct"
-      ]
-    },
-    {
-      "type": "selector",
-      "tag": "🛑 全球拦截",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "block"
-      ]
-    },
-    {
-      "type": "selector",
       "tag": "🐟 漏网之鱼",
       "interrupt_exist_connections": true,
       "outbounds": [
         "🚀 节点选择",
         "🎯 全球直连"
       ]
+    },
+    {
+      "type": "direct",
+      "tag": "🎯 全球直连"
+    },
+    {
+      "type": "block",
+      "tag": "🛑 全球拦截"
     }
   ],
   "route": {
@@ -204,6 +180,16 @@
       {
         "action": "hijack-dns",
         "protocol": "dns"
+      },
+      {
+        "action": "route",
+        "clash_mode": "Direct",
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "action": "route",
+        "clash_mode": "Global",
+        "outbound": "🚀 节点选择"
       },
       {
         "rule_set": "GeoIP-Private",
@@ -261,7 +247,7 @@
     ],
     "final": "🐟 漏网之鱼",
     "auto_detect_interface": true,
-    "default_http_client": "default",
+    "default_http_client": "🚀 节点选择",
     "default_domain_resolver": "Alibab-DoH",
     "rule_set": [
       {
@@ -269,7 +255,7 @@
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads-all.srs",
         "format": "binary",
-        "http_client": "default",
+        "http_client": "🚀 节点选择",
         "update_interval": "1d"
       },
       {
@@ -277,7 +263,7 @@
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
         "format": "binary",
-        "http_client": "default",
+        "http_client": "🚀 节点选择",
         "update_interval": "1d"
       },
       {
@@ -285,7 +271,7 @@
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple.srs",
         "format": "binary",
-        "http_client": "default",
+        "http_client": "🚀 节点选择",
         "update_interval": "1d"
       },
       {
@@ -293,7 +279,7 @@
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cn.srs",
         "format": "binary",
-        "http_client": "default",
+        "http_client": "🚀 节点选择",
         "update_interval": "1d"
       },
       {
@@ -301,7 +287,7 @@
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
         "format": "binary",
-        "http_client": "default",
+        "http_client": "🚀 节点选择",
         "update_interval": "1d"
       },
       {
@@ -309,7 +295,7 @@
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/gfw.srs",
         "format": "binary",
-        "http_client": "default",
+        "http_client": "🚀 节点选择",
         "update_interval": "1d"
       },
       {
@@ -317,7 +303,7 @@
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-!cn.srs",
         "format": "binary",
-        "http_client": "default",
+        "http_client": "🚀 节点选择",
         "update_interval": "1d"
       },
       {
@@ -325,7 +311,7 @@
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-cn.srs",
         "format": "binary",
-        "http_client": "default",
+        "http_client": "🚀 节点选择",
         "update_interval": "1d"
       },
       {
@@ -333,7 +319,7 @@
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-!cn.srs",
         "format": "binary",
-        "http_client": "default",
+        "http_client": "🚀 节点选择",
         "update_interval": "1d"
       }
     ]
@@ -348,7 +334,7 @@
         "enabled": true,
         "path": "dashboard",
         "download_url": "https://github.com/SagerNet/sing-box-dashboard/archive/refs/heads/gh-pages.zip",
-        "http_client": "default",
+        "http_client": "🚀 节点选择",
         "update_interval": "1d"
       }
     }
