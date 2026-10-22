@@ -63,6 +63,7 @@
       {
        "rule_set": [
           "GeoSite-AI-!CN",
+          "GeoSite-Docker",
           "GeoSite-GFW",
           "GeoSite-Geolocation-!CN"
         ],
@@ -176,7 +177,7 @@
     "rules": [
       {
         "action": "sniff"
-      }, 
+      },
       {
         "action": "hijack-dns",
         "protocol": "dns"
@@ -208,7 +209,6 @@
         "action": "route",
         "outbound": "🛑 全球拦截"
       },
-
       {
         "rule_set": "GeoSite-CN",
         "action": "route",
@@ -228,6 +228,11 @@
         "rule_set": "GeoSite-Apple",
         "action": "route",
         "outbound": "🍎 苹果服务"
+      },
+      {
+        "rule_set": "GeoSite-Docker",
+        "action": "route",
+        "outbound": "🚀 节点选择"
       },
       {
         "rule_set": "GeoSite-AI-!CN",
@@ -318,6 +323,14 @@
         "tag": "GeoSite-Geolocation-!CN",
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-!cn.srs",
+        "format": "binary",
+        "http_client": "🚀 节点选择",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "GeoSite-Docker",
+        "type": "remote",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/docker.srs",
         "format": "binary",
         "http_client": "🚀 节点选择",
         "update_interval": "1d"
