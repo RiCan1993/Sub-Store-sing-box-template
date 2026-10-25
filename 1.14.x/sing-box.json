@@ -31,7 +31,7 @@
         "server_port": 443,
         "server": "dns.google",
         "path": "/dns-query",
-        "domain_resolver": "Alibab-DNS",
+        "domain_resolver": "Google-DNS",
         "detour": "🚀 节点选择"
       },
       {
@@ -53,6 +53,7 @@
         "server": "Google-DNS"
       },
       {
+        "action": "route",
         "rule_set": [
           "GeoSite-Apple",
           "GeoSite-CN",
@@ -61,18 +62,21 @@
         "server": "Alibab-DoH"
       },
       {
-       "rule_set": [
-          "GeoSite-AI-!CN",
-          "GeoSite-Docker",
-          "GeoSite-GFW",
-          "GeoSite-Geolocation-!CN"
-        ],
         "action": "route",
+        "rule_set": [
+            "GeoSite-AI-!CN",
+            "GeoSite-Docker",
+            "GeoSite-GFW",
+            "GeoSite-Geolocation-!CN"
+          ],
         "server": "Google-DoH"
       }
     ],
-    "optimistic": true,
-    "final": "Alibab-DoH"
+    "optimistic": {
+      "enabled": true,
+      "timeout": "3d"
+    },
+    "final": "Google-DoH"
   },
   "ntp": {
     "enabled": true,
@@ -90,7 +94,7 @@
     {
       "tag": "tun-in",
       "type": "tun",
-      "interface_name": "sing-box",
+      "interface_name": "",
       "address": [
         "172.18.0.1/30",
         "fdfe:dcba:9876::1/126"
@@ -98,6 +102,7 @@
       "mtu": 1500,
       "auto_route": true,
       "strict_route": false,
+      "stack": "mixed",
       "platform": {
         "http_proxy": {
           "enabled": true,
@@ -114,10 +119,7 @@
       "tag": "mixed-in",
       "type": "mixed",
       "listen": "127.0.0.1",
-      "listen_port": 7890,
-      "tcp_fast_open": false,
-      "tcp_multi_path": false,
-      "udp_fragment": false
+      "listen_port": 7890
     }
   ],
   "outbounds": [
@@ -193,60 +195,65 @@
         "outbound": "🚀 节点选择"
       },
       {
-        "rule_set": "GeoIP-Private",
-        "action": "route",
-        "outbound": "🎯 全球直连"
-      },
-      {
         "action": "route",
         "network": "icmp",
         "outbound": "🎯 全球直连"
       },
       {
-        "rule_set": [
-          "GeoSite-Ads-All"
-        ],
         "action": "route",
+        "protocol": "quic",
         "outbound": "🛑 全球拦截"
       },
       {
+        "action": "route",
+        "rule_set": [
+          "GeoSite-Ads-All"
+        ],
+        "outbound": "🛑 全球拦截"
+      },
+      {
+        "action": "route",
+        "rule_set": "GeoIP-Private",
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "action": "route",
         "rule_set": "GeoSite-CN",
-        "action": "route",
         "outbound": "🎯 全球直连"
       },
       {
+        "action": "route",
         "rule_set": "GeoSite-Geolocation-CN",
-        "action": "route",
         "outbound": "🎯 全球直连"
       },
       {
+        "action": "route",
         "rule_set": "GeoIP-CN",
-        "action": "route",
         "outbound": "🎯 全球直连"
       },
       {
-        "rule_set": "GeoSite-Apple",
         "action": "route",
+        "rule_set": "GeoSite-Apple",
         "outbound": "🍎 苹果服务"
       },
       {
-        "rule_set": "GeoSite-Docker",
         "action": "route",
+        "rule_set": "GeoSite-Docker",
         "outbound": "🚀 节点选择"
       },
       {
-        "rule_set": "GeoSite-AI-!CN",
         "action": "route",
+        "rule_set": "GeoSite-AI-!CN",
         "outbound": "🧠 AI服务"
       },
       {
-        "rule_set": "GeoSite-GFW",
         "action": "route",
+        "rule_set": "GeoSite-GFW",
         "outbound": "🚀 节点选择"
       },
       {
-        "rule_set": "GeoSite-Geolocation-!CN",
         "action": "route",
+        "rule_set": "GeoSite-Geolocation-!CN",
         "outbound": "🚀 节点选择"
       }
     ],
@@ -355,6 +362,7 @@
   "experimental": {
     "cache_file": {
       "enabled": true,
+      "path": "cache.db",
       "store_dns": true,
       "store_fakeip": true
     }
