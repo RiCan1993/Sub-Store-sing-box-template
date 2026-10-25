@@ -69,14 +69,14 @@
             "GeoSite-GFW",
             "GeoSite-Geolocation-!CN"
           ],
-        "server": "FakeIP"
+        "server": "Google-DoH"
       }
     ],
     "optimistic": {
       "enabled": true,
       "timeout": "3d"
     },
-    "final": "Alibab-DoH",
+    "final": "Google-DoH",
     "strategy": "prefer_ipv4"
   },
   "ntp": {
@@ -113,7 +113,6 @@
         }
       },
       "route_exclude_address_set": [
-        "GeoIP-Private",
         "GeoIP-CN"
       ]
     },
@@ -154,7 +153,7 @@
     {
       "type": "urltest",
       "tag": "🎈 自动选择",
-      "url": "http://www.gstatic.com/generate_204",
+      "url": "https://www.gstatic.com/generate_204",
       "interval": "10m",
       "tolerance": 50,
       "outbounds": []
