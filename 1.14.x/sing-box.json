@@ -69,15 +69,15 @@
             "GeoSite-GFW",
             "GeoSite-Geolocation-!CN"
           ],
-        "server": "Google-DoH"
+        "server": "FakeIP"
       }
     ],
     "optimistic": {
       "enabled": true,
       "timeout": "3d"
     },
-    "final": "Google-DoH",
-    "strategy": "ipv4_only"
+    "final": "Alibab-DoH",
+    "strategy": "prefer_ipv4"
   },
   "ntp": {
     "enabled": true,
