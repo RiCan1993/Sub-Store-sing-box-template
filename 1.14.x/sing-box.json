@@ -5,33 +5,54 @@
   "dns": {
     "servers": [
       {
-        "tag": "Alibab-DNS",
-        "type": "udp",
-        "server": "223.5.5.5",
-        "server_port": 53
+        "tag": "hosts_dns",
+        "type": "hosts",
+        "predefined": {
+          "dns.alidns.com": [
+            "223.5.5.5",
+            "223.6.6.6",
+            "2400:3200::1",
+            "2400:3200:baba::1"
+          ],
+          "dns.google": [
+            "8.8.8.8",
+            "8.8.4.4",
+            "2001:4860:4860::8888",
+            "2001:4860:4860::8844"
+          ]
+        }
       },
       {
-        "tag": "Google-DNS",
+        "tag": "ali-udp",
+        "type": "udp",
+        "server": "dns.alidns.com",
+        "domain_resolver": "hosts_dns"
+      },
+      {
+        "tag": "gg-udp",
         "type": "udp",
         "detour": "🚀 节点选择",
-        "server": "8.8.8.8",
-        "server_port": 53
-      },
-      {
-        "tag": "Alibab-DoH",
-        "type": "https",
-        "server_port": 443,
-        "server": "dns.alidns.com",
-        "path": "/dns-query",
-        "domain_resolver": "Alibab-DNS"
-      },
-      {
-        "tag": "Google-DoH",
-        "type": "https",
-        "server_port": 443,
         "server": "dns.google",
-        "path": "/dns-query",
-        "domain_resolver": "Google-DNS",
+        "domain_resolver": "hosts_dns"
+      },
+      {
+        "tag": "ali-doh",
+        "type": "https",
+        "server": "dns.alidns.com",
+        "domain_resolver": "hosts_dns"
+      },
+      {
+        "tag": "gg-doh",
+        "type": "https",
+        "server": "dns.google",
+        "domain_resolver": "hosts_dns",
+        "detour": "🚀 节点选择"
+      },
+      {
+        "tag": "gg-dot",
+        "type": "tls",
+        "server": "dns.google",
+        "domain_resolver": "hosts_dns",
         "detour": "🚀 节点选择"
       },
       {
@@ -44,13 +65,13 @@
     "rules": [
       {
         "action": "route",
-        "clash_mode": "Direct",
-        "server": "Alibab-DNS"
+        "clash_mode": "direct",
+        "server": "ali-udp"
       },
       {
         "action": "route",
-        "clash_mode": "Global",
-        "server": "Google-DNS"
+        "clash_mode": "global",
+        "server": "gg-udp"
       },
       {
         "action": "route",
@@ -59,7 +80,18 @@
           "GeoSite-CN",
           "GeoSite-Geolocation-CN"
         ],
-        "server": "Alibab-DoH"
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "server": "ali-doh"
+      },
+      {
+        "query_type": [
+          "HTTPS",
+          "SVCB"
+        ],
+        "action": "reject"
       },
       {
         "action": "route",
@@ -69,14 +101,19 @@
             "GeoSite-GFW",
             "GeoSite-Geolocation-!CN"
           ],
-        "server": "Google-DoH"
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "server": "gg-doh"
       }
+
     ],
     "optimistic": {
       "enabled": true,
       "timeout": "3d"
     },
-    "final": "Google-DoH",
+    "final": "gg-doh",
     "strategy": "prefer_ipv4"
   },
   "ntp": {
@@ -188,12 +225,12 @@
       },
       {
         "action": "route",
-        "clash_mode": "Direct",
+        "clash_mode": "direct",
         "outbound": "🎯 全球直连"
       },
       {
         "action": "route",
-        "clash_mode": "Global",
+        "clash_mode": "global",
         "outbound": "🚀 节点选择"
       },
       {
@@ -262,7 +299,7 @@
     "final": "🐟 漏网之鱼",
     "auto_detect_interface": true,
     "default_http_client": "🚀 节点选择",
-    "default_domain_resolver": "Alibab-DoH",
+    "default_domain_resolver": "ali-doh",
     "rule_set": [
       {
         "tag": "GeoSite-Ads-All",
