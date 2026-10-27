@@ -5,7 +5,7 @@
   "dns": {
     "servers": [
       {
-        "tag": "hosts_dns",
+        "tag": "hosts-dns",
         "type": "hosts",
         "predefined": {
           "dns.alidns.com": [
@@ -26,33 +26,26 @@
         "tag": "ali-udp",
         "type": "udp",
         "server": "dns.alidns.com",
-        "domain_resolver": "hosts_dns"
+        "domain_resolver": "hosts-dns"
       },
       {
         "tag": "gg-udp",
         "type": "udp",
         "detour": "🚀 节点选择",
         "server": "dns.google",
-        "domain_resolver": "hosts_dns"
+        "domain_resolver": "hosts-dns"
       },
       {
         "tag": "ali-doh",
         "type": "https",
         "server": "dns.alidns.com",
-        "domain_resolver": "hosts_dns"
+        "domain_resolver": "hosts-dns"
       },
       {
         "tag": "gg-doh",
         "type": "https",
         "server": "dns.google",
-        "domain_resolver": "hosts_dns",
-        "detour": "🚀 节点选择"
-      },
-      {
-        "tag": "gg-dot",
-        "type": "tls",
-        "server": "dns.google",
-        "domain_resolver": "hosts_dns",
+        "domain_resolver": "hosts-dns",
         "detour": "🚀 节点选择"
       },
       {
@@ -65,12 +58,17 @@
     "rules": [
       {
         "action": "route",
-        "clash_mode": "direct",
+        "server": "hosts-dns",
+        "preferred_by": "hosts-dns"
+      },
+      {
+        "action": "route",
+        "clash_mode": "Direct",
         "server": "ali-udp"
       },
       {
         "action": "route",
-        "clash_mode": "global",
+        "clash_mode": "Global",
         "server": "gg-udp"
       },
       {
@@ -107,7 +105,6 @@
         ],
         "server": "gg-doh"
       }
-
     ],
     "optimistic": {
       "enabled": true,
@@ -225,12 +222,12 @@
       },
       {
         "action": "route",
-        "clash_mode": "direct",
+        "clash_mode": "Direct",
         "outbound": "🎯 全球直连"
       },
       {
         "action": "route",
-        "clash_mode": "global",
+        "clash_mode": "Global",
         "outbound": "🚀 节点选择"
       },
       {
