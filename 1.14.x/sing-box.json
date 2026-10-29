@@ -88,9 +88,6 @@
       }
     ],
     "optimistic": true,
-    "reverse_mapping": true,
-    "cache_capacity": 8192,
-    
     "final": "Google-DNS",
     "strategy": "prefer_ipv4"
   },
@@ -117,24 +114,24 @@
         "172.18.0.1/30",
         "fdfe:dcba:9876::1/126"
       ],
-      "mtu": 1500,
+      "mtu": 1400,
       "auto_route": true,
       "platform": {
         "http_proxy": {
           "enabled": true,
-          "server": "127.0.0.1",
+          "server": "::",
           "server_port": 7890
         }
       },
       "route_exclude_address_set": [
         "GeoIP-Private",
-        "geosite-cn"
+        "geoip-cn"
       ]
     },
     {
       "tag": "mixed-in",
       "type": "mixed",
-      "listen": "127.0.0.1",
+      "listen": "::",
       "listen_port": 7890
     }
   ],
