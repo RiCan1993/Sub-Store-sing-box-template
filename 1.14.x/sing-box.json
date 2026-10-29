@@ -10,49 +10,26 @@
         "predefined": {
           "dns.alidns.com": [
             "223.5.5.5",
-            "223.6.6.6",
-            "2400:3200::1",
-            "2400:3200:baba::1"
+            "223.6.6.6"
           ],
           "dns.google": [
             "8.8.8.8",
-            "8.8.4.4",
-            "2001:4860:4860::8888",
-            "2001:4860:4860::8844"
+            "8.8.4.4"
           ]
         }
       },
       {
-        "tag": "ali-udp",
-        "type": "udp",
-        "server": "dns.alidns.com",
-        "domain_resolver": "hosts-dns"
-      },
-      {
-        "tag": "gg-udp",
-        "type": "udp",
-        "detour": "🚀 节点选择",
-        "server": "dns.google",
-        "domain_resolver": "hosts-dns"
-      },
-      {
-        "tag": "ali-doh",
+        "tag": "Alibab-DNS",
         "type": "https",
         "server": "dns.alidns.com",
         "domain_resolver": "hosts-dns"
       },
       {
-        "tag": "gg-doh",
+        "tag": "Google-DNS",
         "type": "https",
         "server": "dns.google",
         "domain_resolver": "hosts-dns",
         "detour": "🚀 节点选择"
-      },
-      {
-        "tag": "FakeIP",
-        "type": "fakeip",
-        "inet4_range": "198.18.0.0/15",
-        "inet6_range": "fc00::/18"
       }
     ],
     "rules": [
@@ -64,25 +41,31 @@
       {
         "action": "route",
         "clash_mode": "Direct",
-        "server": "ali-udp"
+        "server": "Alibaba-DNS"
       },
       {
         "action": "route",
         "clash_mode": "Global",
-        "server": "gg-udp"
+        "server": "Google-DNS"
+      },
+      {
+        "action": "reject",
+        "rule_set": [
+          "geosite-category-ads-all"
+        ]
       },
       {
         "action": "route",
         "rule_set": [
-          "GeoSite-Apple",
-          "GeoSite-CN",
-          "GeoSite-Geolocation-CN"
+          "geosite-apple@cn",
+          "geosite-cn",
+          "geosite-geolocation-cn"
         ],
         "query_type": [
           "A",
           "AAAA"
         ],
-        "server": "ali-doh"
+        "server": "Alibaba-DNS"
       },
       {
         "query_type": [
@@ -94,23 +77,21 @@
       {
         "action": "route",
         "rule_set": [
-            "GeoSite-AI-!CN",
-            "GeoSite-Docker",
-            "GeoSite-GFW",
-            "GeoSite-Geolocation-!CN"
+          "geosite-category-ai-!cn",
+          "geosite-geolocation-!cn"
           ],
         "query_type": [
           "A",
           "AAAA"
         ],
-        "server": "gg-doh"
+        "server": "Google-DNS"
       }
     ],
-    "optimistic": {
-      "enabled": true,
-      "timeout": "3d"
-    },
-    "final": "gg-doh",
+    "optimistic": true,
+    "reverse_mapping": true,
+    "cache_capacity": 8192,
+    
+    "final": "Google-DNS",
     "strategy": "prefer_ipv4"
   },
   "ntp": {
@@ -118,6 +99,9 @@
     "server": "time.apple.com",
     "server_port": 123,
     "interval": "30m"
+  },
+  "certificate": {
+    "store": "chrome"
   },
   "http_clients": [
     {
@@ -129,16 +113,12 @@
     {
       "tag": "tun-in",
       "type": "tun",
-      "interface_name": "",
       "address": [
         "172.18.0.1/30",
         "fdfe:dcba:9876::1/126"
       ],
       "mtu": 1500,
       "auto_route": true,
-      "strict_route": false,
-      "stack": "mixed",
-      "dns_mode": "hijack",
       "platform": {
         "http_proxy": {
           "enabled": true,
@@ -148,7 +128,7 @@
       },
       "route_exclude_address_set": [
         "GeoIP-Private",
-        "GeoIP-CN"
+        "geosite-cn"
       ]
     },
     {
@@ -172,17 +152,7 @@
       "tag": "🧠 AI服务",
       "interrupt_exist_connections": true,
       "outbounds": [
-        "🚀 节点选择",
-        "🎯 全球直连"
-      ]
-    },
-    {
-      "type": "selector",
-      "tag": "🍎 苹果服务",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "🚀 节点选择",
-        "🎯 全球直连"
+        "🚀 节点选择"
       ]
     },
     {
@@ -243,7 +213,7 @@
       {
         "action": "route",
         "rule_set": [
-          "GeoSite-Ads-All"
+          "geosite-category-ads-all"
         ],
         "outbound": "🛑 全球拦截"
       },
@@ -254,78 +224,62 @@
       },
       {
         "action": "route",
-        "rule_set": "GeoSite-CN",
+        "rule_set": "geosite-apple@cn",
         "outbound": "🎯 全球直连"
       },
       {
         "action": "route",
-        "rule_set": "GeoSite-Geolocation-CN",
+        "rule_set": "geosite-cn",
         "outbound": "🎯 全球直连"
       },
       {
         "action": "route",
-        "rule_set": "GeoIP-CN",
+        "rule_set": "geosite-geolocation-cn",
         "outbound": "🎯 全球直连"
       },
       {
         "action": "route",
-        "rule_set": "GeoSite-Apple",
-        "outbound": "🍎 苹果服务"
-      },
-      {
-        "action": "route",
-        "rule_set": "GeoSite-Docker",
-        "outbound": "🚀 节点选择"
-      },
-      {
-        "action": "route",
-        "rule_set": "GeoSite-AI-!CN",
+        "rule_set": "geosite-category-ai-!cn",
         "outbound": "🧠 AI服务"
       },
       {
         "action": "route",
-        "rule_set": "GeoSite-GFW",
+        "rule_set": "geosite-geolocation-!cn",
         "outbound": "🚀 节点选择"
       },
       {
+        "action": "resolve"
+      },
+      {
         "action": "route",
-        "rule_set": "GeoSite-Geolocation-!CN",
-        "outbound": "🚀 节点选择"
+        "rule_set": "geoip-cn",
+        "outbound": "🎯 全球直连"
       }
     ],
     "final": "🐟 漏网之鱼",
     "auto_detect_interface": true,
     "default_http_client": "🚀 节点选择",
-    "default_domain_resolver": "ali-doh",
+    "default_domain_resolver": "Alibaba-DNS",
     "rule_set": [
       {
-        "tag": "GeoSite-Ads-All",
+        "tag": [
+          "geosite-category-ads-all",
+          "geosite-apple@cn",
+          "geosite-cn",
+          "geosite-geolocation-cn",
+          "geosite-category-ai-!cn",
+          "geosite-geolocation-!cn"
+        ],
         "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads-all.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/{tag}.srs",
         "format": "binary",
         "http_client": "🚀 节点选择",
         "update_interval": "1d"
       },
       {
-        "tag": "GeoSite-CN",
+        "tag": "geoip-cn",
         "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
-        "format": "binary",
-        "http_client": "🚀 节点选择",
-        "update_interval": "1d"
-      },
-      {
-        "tag": "GeoSite-Apple",
-        "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple.srs",
-        "format": "binary",
-        "http_client": "🚀 节点选择",
-        "update_interval": "1d"
-      },
-      {
-        "tag": "GeoIP-CN",
-        "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cn.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/{tag}.srs",
         "format": "binary",
         "http_client": "🚀 节点选择",
         "update_interval": "1d"
@@ -334,46 +288,6 @@
         "tag": "GeoIP-Private",
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs",
-        "format": "binary",
-        "http_client": "🚀 节点选择",
-        "update_interval": "1d"
-      },
-      {
-        "tag": "GeoSite-GFW",
-        "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/gfw.srs",
-        "format": "binary",
-        "http_client": "🚀 节点选择",
-        "update_interval": "1d"
-      },
-      {
-        "tag": "GeoSite-AI-!CN",
-        "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-!cn.srs",
-        "format": "binary",
-        "http_client": "🚀 节点选择",
-        "update_interval": "1d"
-      },
-      {
-        "tag": "GeoSite-Geolocation-CN",
-        "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-cn.srs",
-        "format": "binary",
-        "http_client": "🚀 节点选择",
-        "update_interval": "1d"
-      },
-      {
-        "tag": "GeoSite-Geolocation-!CN",
-        "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-!cn.srs",
-        "format": "binary",
-        "http_client": "🚀 节点选择",
-        "update_interval": "1d"
-      },
-      {
-        "tag": "GeoSite-Docker",
-        "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/docker.srs",
         "format": "binary",
         "http_client": "🚀 节点选择",
         "update_interval": "1d"
@@ -399,8 +313,7 @@
     "cache_file": {
       "enabled": true,
       "path": "cache.db",
-      "store_dns": true,
-      "store_fakeip": true
+      "store_dns": true
     }
   }
 }
