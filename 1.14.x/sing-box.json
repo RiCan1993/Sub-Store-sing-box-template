@@ -19,7 +19,7 @@
         }
       },
       {
-        "tag": "Alibab-DNS",
+        "tag": "Alibaba-DNS",
         "type": "https",
         "server": "dns.alidns.com",
         "domain_resolver": "hosts-dns"
