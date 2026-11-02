@@ -146,8 +146,7 @@
       "tag": "🧠 AI服务",
       "interrupt_exist_connections": true,
       "outbounds": [
-        "🚀 节点选择",
-        "🎯 全球直连"
+        "🚀 节点选择"
       ]
     },
     {
