@@ -151,15 +151,6 @@
       ]
     },
     {
-      "type": "selector",
-      "tag": "🍎 苹果服务",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "🚀 节点选择",
-        "🎯 全球直连"
-      ]
-    },
-    {
       "type": "urltest",
       "tag": "🎈 自动选择",
       "url": "https://www.gstatic.com/generate_204",
