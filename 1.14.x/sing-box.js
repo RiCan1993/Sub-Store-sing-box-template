@@ -22,7 +22,6 @@ const proxyGroupTags = [
   '🚀 节点选择',
   '🎈 自动选择',
   '🧠 AI服务',
-  '🍎 苹果服务',
 ]
 
 config.outbounds.forEach(outbound => {

@@ -23,19 +23,6 @@
         }
       },
       {
-        "tag": "ali-udp",
-        "type": "udp",
-        "server": "dns.alidns.com",
-        "domain_resolver": "hosts-dns"
-      },
-      {
-        "tag": "gg-udp",
-        "type": "udp",
-        "detour": "🚀 节点选择",
-        "server": "dns.google",
-        "domain_resolver": "hosts-dns"
-      },
-      {
         "tag": "ali-doh",
         "type": "https",
         "server": "dns.alidns.com",
@@ -47,34 +34,28 @@
         "server": "dns.google",
         "domain_resolver": "hosts-dns",
         "detour": "🚀 节点选择"
-      },
-      {
-        "tag": "FakeIP",
-        "type": "fakeip",
-        "inet4_range": "198.18.0.0/15",
-        "inet6_range": "fc00::/18"
       }
     ],
     "rules": [
       {
         "action": "route",
         "server": "hosts-dns",
-        "preferred_by": "hosts-dns"
+        "preferred_by": "hosts"
       },
       {
         "action": "route",
         "clash_mode": "Direct",
-        "server": "ali-udp"
+        "server": "ali-doh"
       },
       {
         "action": "route",
         "clash_mode": "Global",
-        "server": "gg-udp"
+        "server": "gg-doh"
       },
       {
         "action": "route",
         "rule_set": [
-          "GeoSite-Apple",
+          "GeoSite-Apple@CN",
           "GeoSite-CN",
           "GeoSite-Geolocation-CN"
         ],
@@ -95,7 +76,6 @@
         "action": "route",
         "rule_set": [
             "GeoSite-AI-!CN",
-            "GeoSite-Docker",
             "GeoSite-GFW",
             "GeoSite-Geolocation-!CN"
           ],
@@ -106,10 +86,7 @@
         "server": "gg-doh"
       }
     ],
-    "optimistic": {
-      "enabled": true,
-      "timeout": "3d"
-    },
+    "optimistic": true,
     "final": "gg-doh",
     "strategy": "prefer_ipv4"
   },
@@ -129,16 +106,13 @@
     {
       "tag": "tun-in",
       "type": "tun",
-      "interface_name": "",
       "address": [
         "172.18.0.1/30",
         "fdfe:dcba:9876::1/126"
       ],
-      "mtu": 1500,
+      "mtu": 1400,
       "auto_route": true,
       "strict_route": false,
-      "stack": "mixed",
-      "dns_mode": "hijack",
       "platform": {
         "http_proxy": {
           "enabled": true,
@@ -254,6 +228,11 @@
       },
       {
         "action": "route",
+        "rule_set": "GeoSite-Apple@CN",
+        "outbound": "🎯 全球直连"
+      },
+      {
+        "action": "route",
         "rule_set": "GeoSite-CN",
         "outbound": "🎯 全球直连"
       },
@@ -261,21 +240,6 @@
         "action": "route",
         "rule_set": "GeoSite-Geolocation-CN",
         "outbound": "🎯 全球直连"
-      },
-      {
-        "action": "route",
-        "rule_set": "GeoIP-CN",
-        "outbound": "🎯 全球直连"
-      },
-      {
-        "action": "route",
-        "rule_set": "GeoSite-Apple",
-        "outbound": "🍎 苹果服务"
-      },
-      {
-        "action": "route",
-        "rule_set": "GeoSite-Docker",
-        "outbound": "🚀 节点选择"
       },
       {
         "action": "route",
@@ -291,6 +255,14 @@
         "action": "route",
         "rule_set": "GeoSite-Geolocation-!CN",
         "outbound": "🚀 节点选择"
+      },
+      {
+        "action": "resolve"
+      },
+      {
+        "action": "route",
+        "rule_set": "GeoIP-CN",
+        "outbound": "🎯 全球直连"
       }
     ],
     "final": "🐟 漏网之鱼",
@@ -315,9 +287,9 @@
         "update_interval": "1d"
       },
       {
-        "tag": "GeoSite-Apple",
+        "tag": "GeoSite-Apple@CN",
         "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple.srs",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple@cn.srs",
         "format": "binary",
         "http_client": "🚀 节点选择",
         "update_interval": "1d"
@@ -366,14 +338,6 @@
         "tag": "GeoSite-Geolocation-!CN",
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-!cn.srs",
-        "format": "binary",
-        "http_client": "🚀 节点选择",
-        "update_interval": "1d"
-      },
-      {
-        "tag": "GeoSite-Docker",
-        "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/docker.srs",
         "format": "binary",
         "http_client": "🚀 节点选择",
         "update_interval": "1d"
