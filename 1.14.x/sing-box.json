@@ -40,7 +40,7 @@
       {
         "action": "route",
         "server": "hosts-dns",
-        "preferred_by": "hosts"
+        "preferred_by": "hosts-dns"
       },
       {
         "action": "route",
