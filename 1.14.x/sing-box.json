@@ -217,6 +217,19 @@
         "outbound": "🎯 全球直连"
       },
       {
+        "action": "resolve"
+      },
+      {
+        "action": "route",
+        "rule_set": "GeoIP-HK",
+        "outbound": "🚀 节点选择"
+      },
+      {
+        "action": "route",
+        "rule_set": "GeoIP-CN",
+        "outbound": "🎯 全球直连"
+      },
+      {
         "action": "route",
         "rule_set": "GeoSite-Apple@CN",
         "outbound": "🎯 全球直连"
@@ -245,19 +258,6 @@
         "action": "route",
         "rule_set": "GeoSite-Geolocation-!CN",
         "outbound": "🚀 节点选择"
-      },
-      {
-        "action": "resolve"
-      },
-      {
-        "action": "route",
-        "rule_set": "GeoIP-HK",
-        "outbound": "🚀 节点选择"
-      },
-      {
-        "action": "route",
-        "rule_set": "GeoIP-CN",
-        "outbound": "🎯 全球直连"
       }
     ],
     "final": "🐟 漏网之鱼",
