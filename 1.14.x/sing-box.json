@@ -75,10 +75,10 @@
       {
         "action": "route",
         "rule_set": [
-            "GeoSite-AI-!CN",
-            "GeoSite-GFW",
-            "GeoSite-Geolocation-!CN"
-          ],
+          "GeoSite-AI-!CN",
+          "GeoSite-GFW",
+          "GeoSite-Geolocation-!CN"
+        ],
         "query_type": [
           "A",
           "AAAA"
@@ -251,6 +251,11 @@
       },
       {
         "action": "route",
+        "rule_set": "GeoIP-HK",
+        "outbound": "🚀 节点选择"
+      },
+      {
+        "action": "route",
         "rule_set": "GeoIP-CN",
         "outbound": "🎯 全球直连"
       }
@@ -328,6 +333,14 @@
         "tag": "GeoSite-Geolocation-!CN",
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-!cn.srs",
+        "format": "binary",
+        "http_client": "🚀 节点选择",
+        "update_interval": "1d"
+      },
+      {
+        "tag": "GeoIP-HK",
+        "type": "remote",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/hk.srs",
         "format": "binary",
         "http_client": "🚀 节点选择",
         "update_interval": "1d"
