@@ -16,9 +16,7 @@
           ],
           "dns.google": [
             "8.8.8.8",
-            "8.8.4.4",
-            "2001:4860:4860::8888",
-            "2001:4860:4860::8844"
+            "8.8.4.4"
           ]
         }
       },
@@ -75,7 +73,6 @@
       {
         "action": "route",
         "rule_set": [
-          "GeoSite-AI-!CN",
           "GeoSite-GFW",
           "GeoSite-Geolocation-!CN"
         ],
@@ -139,14 +136,6 @@
       "interrupt_exist_connections": true,
       "outbounds": [
         "🎈 自动选择"
-      ]
-    },
-    {
-      "type": "selector",
-      "tag": "🧠 AI服务",
-      "interrupt_exist_connections": true,
-      "outbounds": [
-        "🚀 节点选择"
       ]
     },
     {
@@ -246,11 +235,6 @@
       },
       {
         "action": "route",
-        "rule_set": "GeoSite-AI-!CN",
-        "outbound": "🧠 AI服务"
-      },
-      {
-        "action": "route",
         "rule_set": "GeoSite-GFW",
         "outbound": "🚀 节点选择"
       },
@@ -309,14 +293,6 @@
         "tag": "GeoSite-GFW",
         "type": "remote",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/gfw.srs",
-        "format": "binary",
-        "http_client": "🚀 节点选择",
-        "update_interval": "1d"
-      },
-      {
-        "tag": "GeoSite-AI-!CN",
-        "type": "remote",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-!cn.srs",
         "format": "binary",
         "http_client": "🚀 节点选择",
         "update_interval": "1d"
